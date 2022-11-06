@@ -11,12 +11,21 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password', placeholder: '••••••' },
       },
       async authorize(options) {
-        return await prisma?.user.findFirst({
+        const user = await prisma?.user.findFirst({
           where: {
             email: options?.email,
             password: options?.password,
           },
         });
+
+        if (!user) {
+          return user;
+        }
+
+        return {
+          ...user,
+          name: user.displayName,
+        };
       },
     }),
   ],
