@@ -35,7 +35,7 @@ const Home: NextPageWithLayout = () => {
         return (
           <div
             key={t.id}
-            className="relative flex w-full max-w-lg cursor-pointer items-center justify-between rounded bg-base-200 pt-2 pb-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
+            className="relative flex w-full cursor-pointer items-center justify-between rounded bg-base-200 pt-2 pb-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
             onClick={() => push(`/chores/${t.id}`)}
           >
             <span className="text-base-content text-opacity-80">{t.title}</span>
@@ -45,7 +45,7 @@ const Home: NextPageWithLayout = () => {
               </div>
             )}
             <button
-              className="btn-ghost btn-square btn right-0 bg-base-content bg-opacity-5"
+              className="btn-ghost btn-square btn right-0 bg-base-content bg-opacity-5 ml-2"
               onClick={event => {
                 completeTask.mutateAsync({ id: t.id }, { onSuccess: () => utils.tasks.getTasks.invalidate() });
                 event.stopPropagation();
@@ -66,12 +66,12 @@ const Home: NextPageWithLayout = () => {
           </div>
         );
       })}
-      <div className="divider">Other tasks</div>
+      <div className="divider">Not my problem</div>
       {otherTasks?.map(t => {
         return (
           <div
             key={t.id}
-            className="relative flex w-full max-w-lg cursor-pointer items-center justify-between rounded bg-base-200 pt-2 pb-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
+            className="relative flex w-full cursor-pointer items-center justify-between rounded bg-base-200 pt-2 pb-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
             onClick={() => push(`/chores/${t.id}`)}
           >
             <span className="text-base-content text-opacity-80">{t.title}</span>
@@ -81,7 +81,7 @@ const Home: NextPageWithLayout = () => {
               </div>
             )}
             <button
-              className="btn-ghost btn-square btn right-0 bg-base-content bg-opacity-5"
+              className="btn-ghost btn-square btn right-0 bg-base-content bg-opacity-5 ml-2"
               onClick={event => {
                 completeTask.mutateAsync({ id: t.id }, { onSuccess: () => utils.tasks.getTasks.invalidate() });
                 event.stopPropagation();
