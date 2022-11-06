@@ -15,7 +15,28 @@ datasource db {
 }
 
 model User {
-    id            String    @id @default(uuid())
-    email         String    @unique
-    password      String
+   id            String    @id @default(uuid())
+   email         String    @unique
+   displayName   String
+   password      String
+   history       History[]
+   sign          Int
+}
+
+model Task {
+   id            String    @id @default(uuid())
+   title         String
+   history       History[]
+   frequency     Int?
+   score         Int       @default(0)
+   lastCompleted DateTime  @default(now())
+}
+
+model History {
+   id           String      @id @default(uuid())
+   taskId       String
+   task         Task        @relation(fields: [taskId], references: [id])
+   userId       String
+   user         User        @relation(fields: [userId], references: [id])
+   createdAt    DateTime    @default(now())
 }
