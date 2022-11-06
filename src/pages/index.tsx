@@ -37,14 +37,12 @@ const Home: NextPageWithLayout = () => {
           return (
             <div
               key={t.id}
-              className="relative flex w-full cursor-pointer items-center justify-between rounded bg-base-200 pb-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
+              className="indicator relative flex w-full cursor-pointer items-center justify-between rounded bg-base-200 pb-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
               onClick={() => push(`/chores/${t.id}`)}
             >
               <span className="text-base-content text-opacity-80">{t.title}</span>
               {t.times > 1 && (
-                <div className="absolute -top-2 -left-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-accent/80  text-xs font-bold text-accent-content dark:border-gray-900">
-                  {t.times}
-                </div>
+                <span className="indicator-item indicator-top indicator-start badge-secondary badge"> {t.times}</span>
               )}
               <button
                 className="btn-ghost btn-square btn right-0 ml-2 bg-base-content bg-opacity-5"
@@ -75,14 +73,12 @@ const Home: NextPageWithLayout = () => {
           return (
             <div
               key={t.id}
-              className="relative flex w-full cursor-pointer items-center justify-between rounded bg-base-200 pb-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
+              className="relative indicator flex w-full cursor-pointer items-center justify-between rounded bg-base-200 pb-2 pl-3 pr-3 shadow-md hover:bg-base-300"
               onClick={() => push(`/chores/${t.id}`)}
             >
-              <span className="text-base-content text-opacity-80">{t.title}</span>
+              <span className="text-base-content font-semibold text-opacity-80">{t.title}</span>
               {t.times > 1 && (
-                <div className="absolute -top-2 -left-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-accent/80  text-xs font-bold text-accent-content dark:border-gray-900">
-                  {t.times}
-                </div>
+                <span className="indicator-item indicator-top indicator-start badge-secondary badge"> {t.times}</span>
               )}
               <button
                 className="btn-ghost btn-square btn right-0 ml-2 bg-base-content bg-opacity-5"
