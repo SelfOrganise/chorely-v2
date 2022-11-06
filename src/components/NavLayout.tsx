@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import {useSession} from "next-auth/react";
+import { useSession } from 'next-auth/react';
 
 const themes = [
   'light',
@@ -42,7 +42,7 @@ export function NavLayout({ children }: React.PropsWithChildren): JSX.Element {
 
   return (
     <main data-theme={theme} className="container flex min-h-screen min-w-full flex-col items-center p-4">
-      <div className="max-w-xl w-full">
+      <div className="w-full max-w-xl">
         <div className="navbar bg-base-100">
           <div className="flex-none">
             <button className="btn-ghost btn-square btn" onClick={() => router.asPath !== '/' && router.push('/')}>
@@ -79,8 +79,25 @@ export function NavLayout({ children }: React.PropsWithChildren): JSX.Element {
             <span>
               Hello <span className="font-bold">{session.data?.user?.name}</span>
             </span>
-            <Link href="/chores/new">New chore</Link>
           </div>
+          <Link className="btn-ghost btn" href="/chores/new">
+            <button className="btn-ghost btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                />
+              </svg>
+            </button>
+          </Link>
           <div className="dropdown-end dropdown">
             <label tabIndex={0} className="btn-ghost btn-circle avatar btn">
               <svg

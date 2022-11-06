@@ -93,7 +93,22 @@ export const tasksRouter = router({
   }),
 
   getTasks: protectedProcedure.query(async ({ ctx }) => {
-    const tasks = await ctx.prisma.task.findMany();
+    const tasks = await ctx.prisma.task.findMany({
+      select: {
+        id: true,
+        score: true,
+        title: true,
+        history: {
+          select: {
+            createdAt: true,
+          },
+          take: 1,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
     const users = await ctx.prisma.user.findMany();
 
     const result = tasks.map(t => {
