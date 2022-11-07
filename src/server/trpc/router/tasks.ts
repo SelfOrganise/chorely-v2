@@ -6,7 +6,7 @@ const Positive = 1;
 const Negative = -1;
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const signal = new OneSignal.Client(process.env.ONE_SIGNAL_APP!, process.env.ONE_SIGNAL_KEY!);
+const signal = new OneSignal.Client(process.env.NEXT_PUBLIC_ONE_SIGNAL_APP!, process.env.ONE_SIGNAL_KEY!);
 
 export const tasksRouter = router({
   createTask: protectedProcedure
@@ -207,16 +207,17 @@ export const tasksRouter = router({
 
       const assignedUser = task.score < 0 ? users.find(u => u.sign === Positive) : users.find(u => u.sign === Negative);
       const isAssignedToUser = assignedUser?.id === user.id;
-      const heading = !isAssignedToUser || times > 1 ? `${user.displayName} completed ${task.title}` : `${task.title} was assigned to you`;
-      const content = isAssignedToUser
+      const [heading, content] = isAssignedToUser
         ? times > 1
-          ? `They have ${times - 1} turns left`
-          : `${user.displayName} completed the task`
-        : `You now have to complete the task ${times + 1} times`;
+          ? [
+              `✅ Task completed (${times - 1}x left)`,
+              `${user.displayName} completed ${task.title}. They have (${times - 1}) turns left.`,
+            ]
+          : [`ℹ️ You have a new task`, `${task.title} is now assigned to you.`]
+        : [`⚠ Task completed by ${user.displayName}`, `You now have to complete ${task.title} (${times + 1}) times.`];
 
       await signal
         .createNotification({
-          chrome_web_icon: 'https://todo.3pounds.cyou/favicon.ico',
           headings: { en: heading },
           url: `https://demo.3pounds.cyou/chores/${task.id}`,
           contents: {

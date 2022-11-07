@@ -34,7 +34,13 @@ const NewChore: NextPageWithLayout = () => {
         <input className="input-bordered input" autoFocus type="text" name="title" placeholder="Title" />
         <input className="input-bordered input" type="number" name="frequency" placeholder="Frequency in hours" />
         <div className="grid grid-cols-2 gap-2">
-          <button className="btn-secondary btn" type="submit">
+          <button
+            className="btn-secondary btn"
+            onClick={event => {
+              event.preventDefault();
+              router.replace('/');
+            }}
+          >
             Cancel
           </button>
           <button className="btn-primary btn" type="submit">

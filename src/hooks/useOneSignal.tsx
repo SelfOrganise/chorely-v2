@@ -30,7 +30,7 @@ export function useOneSignal() {
 
     if (!isInitialized.current) {
       OneSignal.init({
-        appId: process.env.ONE_SIGNAL_APP!,
+        appId: process.env.NEXT_PUBLIC_ONE_SIGNAL_APP!,
         serviceWorkerParam: { scope: '/push/onesignal/' },
         serviceWorkerPath: 'push/onesignal/OneSignalSDKWorker.js',
         notificationClickHandlerMatch: 'exact',

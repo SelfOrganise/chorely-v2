@@ -23,6 +23,8 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_PUBLIC_ONE_SIGNAL_APP 067ca6e5-36c8-4647-8ca9-e503ee0119da
+
 RUN yarn build
 RUN yarn build:notify
 
