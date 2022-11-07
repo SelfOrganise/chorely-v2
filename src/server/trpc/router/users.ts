@@ -10,11 +10,6 @@ export const usersRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.prisma.user.create({
-        data: {
-          email: input.email,
-          password: input.password,
-        },
-      });
+      throw new Error('NotImplemented');
     }),
 });
