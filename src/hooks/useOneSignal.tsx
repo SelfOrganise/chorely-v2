@@ -13,7 +13,7 @@ export function useOneSignal() {
       registerNotificationHandler();
 
       const split: [string, string] = e?.action?.split('@');
-      if (split.length != 2) {
+      if (split?.length != 2) {
         console.log('Could not process:', e.action);
         return;
       }
@@ -30,13 +30,12 @@ export function useOneSignal() {
 
     if (!isInitialized.current) {
       OneSignal.init({
-        appId: '52db2cee-fecc-4440-af71-ec48873504e0',
+        appId: process.env.ONE_SIGNAL_APP!,
         serviceWorkerParam: { scope: '/push/onesignal/' },
         serviceWorkerPath: 'push/onesignal/OneSignalSDKWorker.js',
-        notificationClickHandlerMatch: 'origin',
-        notificationClickHandlerAction: 'focus',
+        notificationClickHandlerMatch: 'exact',
+        notificationClickHandlerAction: 'navigate',
         allowLocalhostAsSecureOrigin: true,
-        subdomainName: isProd ? '' : 'todo-3pounds',
         notifyButton: {
           enable: true,
         },

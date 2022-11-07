@@ -11,12 +11,21 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password', placeholder: '••••••' },
       },
       async authorize(options) {
-        return await prisma?.user.findFirst({
+        const user = await prisma?.user.findFirst({
           where: {
             email: options?.email,
             password: options?.password,
           },
         });
+
+        if (!user) {
+          return user;
+        }
+
+        return {
+          ...user,
+          name: user.displayName,
+        };
       },
     }),
   ],
@@ -24,14 +33,14 @@ export const authOptions: NextAuthOptions = {
     colorScheme: 'dark',
   },
   session: {
-    maxAge: 3600, // token will expire after 1 hour
+    maxAge: 60 * 60 * 24 * 30 * 3, // token will expire after 3 months
   },
   callbacks: {
     async jwt({ token }) {
       return token;
     },
     async session({ session, token }) {
-      session.user = { id: token.sub || 'invalid', email: token.email };
+      session.user = { id: token.sub || 'invalid', email: token.email, name: token.name };
 
       return session;
     },
