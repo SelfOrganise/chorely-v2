@@ -1,7 +1,8 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import {Toaster} from "react-hot-toast";
 
 const themes = [
   'light',
@@ -40,8 +41,21 @@ export function NavLayout({ children }: React.PropsWithChildren): JSX.Element {
   const [theme, setTheme] = useState('cupcake');
   const router = useRouter();
 
+  useEffect(() => {
+    setTheme(old => window.localStorage.getItem('theme') || old);
+  }, []);
+
   return (
     <main data-theme={theme} className="container flex min-h-screen min-w-full flex-col items-center p-4">
+      <Toaster
+        toastOptions={{
+          style: {
+            background: '#333',
+            color: '#fff',
+            fontSize: '12px',
+          },
+        }}
+      />
       <div className="w-full max-w-xl">
         <div className="navbar bg-base-100">
           <div className="flex-none">
@@ -120,7 +134,15 @@ export function NavLayout({ children }: React.PropsWithChildren): JSX.Element {
               className="dropdown-content menu rounded-box menu-compact mt-3 h-[200px] w-52 flex-nowrap overflow-auto bg-base-100 p-2 shadow"
             >
               {themes.map(t => (
-                <li onClick={() => setTheme(t)} className="justify-between" key={t} value={t}>
+                <li
+                  onClick={() => {
+                    localStorage.setItem('theme', t);
+                    setTheme(t);
+                  }}
+                  className="justify-between"
+                  key={t}
+                  value={t}
+                >
                   <a>{t}</a>
                 </li>
               ))}

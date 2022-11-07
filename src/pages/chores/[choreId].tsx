@@ -5,6 +5,7 @@ import { trpc } from '../../utils/trpc';
 import moment from 'moment';
 import { FormEvent } from 'react';
 import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 const ChoreDetail: NextPageWithLayout = () => {
   const router = useRouter();
@@ -29,6 +30,7 @@ const ChoreDetail: NextPageWithLayout = () => {
       <form
         className="relative flex flex-col space-y-3 pb-4"
         onSubmit={(form: FormEvent<HTMLFormElement & { title: HTMLInputElement; frequency: HTMLInputElement }>) => {
+          debugger;
           updateChore.mutateAsync({
             id: chore.data!.id,
             title: form.currentTarget.title.value,
@@ -47,7 +49,7 @@ const ChoreDetail: NextPageWithLayout = () => {
             defaultValue={chore.data.title}
           />
           {chore.data.times > 1 && (
-            <div className="badge-secondary badge indicator-start indicator-item indicator-top">{chore.data.times}</div>
+            <div className="indicator-start badge-secondary badge indicator-item indicator-top">{chore.data.times}</div>
           )}
         </div>
         <input
@@ -60,9 +62,15 @@ const ChoreDetail: NextPageWithLayout = () => {
         <div className="grid grid-cols-2 gap-2">
           <button
             className="btn-secondary btn flex flex-1"
-            onClick={() => {
+            onClick={event => {
               if (confirm(`Are you sure you want to delete '${chore.data?.title}'.`)) {
-                deleteChore.mutateAsync(chore.data!.id, { onSuccess: () => router.push('/') });
+                toast.promise(deleteChore.mutateAsync(chore.data!.id, { onSuccess: () => router.push('/') }), {
+                  loading: <span>Deleting {chore.data?.title}</span>,
+                  success: <b>Deleted {chore.data?.title}</b>,
+                  error: <b>Could not delete {chore.data?.title}</b>,
+                });
+
+                event.preventDefault();
               }
             }}
           >
@@ -96,11 +104,18 @@ const ChoreDetail: NextPageWithLayout = () => {
                       <button
                         className="btn-ghost btn"
                         onClick={() => {
-                          undoChore.mutateAsync(h.id, {
-                            onSuccess: () => {
-                              context.tasks.getTask.invalidate(chore.data!.id);
-                            },
-                          });
+                          toast.promise(
+                            undoChore.mutateAsync(h.id, {
+                              onSuccess: () => {
+                                context.tasks.getTask.invalidate(chore.data!.id);
+                              },
+                            }),
+                            {
+                              loading: <span>Undoing previous completion</span>,
+                              success: <b>Undo complete</b>,
+                              error: <b>Could not undo</b>,
+                            }
+                          );
                         }}
                       >
                         <svg

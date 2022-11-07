@@ -8,6 +8,7 @@ import { forwardRef, useEffect } from 'react';
 import OneSignal from 'react-onesignal';
 import moment from 'moment';
 import InternalFlipMove from 'react-flip-move';
+import toast from "react-hot-toast";
 
 const FlipMove: any = InternalFlipMove;
 
@@ -52,7 +53,7 @@ Home.getLayout = getNavLayout;
 
 // eslint-disable-next-line react/display-name
 const Chore = forwardRef(
-  ({ task }: { task: AppRouterTypes['tasks']['getTasks']['output'][number] }, ref): JSX.Element => {
+  ({ task }: { task: AppRouterTypes['tasks']['getTasks']['output'][number] }, ref: any): JSX.Element => {
     const completeTask = trpc.tasks.completeTask.useMutation();
     const { push } = useRouter();
     const utils = trpc.useContext();
@@ -76,7 +77,11 @@ const Chore = forwardRef(
         <button
           className="btn-ghost btn-square btn right-0 ml-2 bg-base-content bg-opacity-5"
           onClick={event => {
-            completeTask.mutateAsync({ id: task.id }, { onSuccess: () => utils.tasks.getTasks.invalidate() });
+            toast.promise(completeTask.mutateAsync({ id: task.id }, { onSuccess: () => utils.tasks.getTasks.invalidate() }), {
+              loading: <span>Completing {task?.title}</span>,
+              success: <b>Completed {task?.title}</b>,
+              error: <b>Could not complete {task?.title}</b>,
+            });
             event.stopPropagation();
             event.preventDefault();
           }}

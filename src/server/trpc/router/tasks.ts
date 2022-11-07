@@ -175,11 +175,17 @@ export const tasksRouter = router({
         },
       });
 
+      if (!task) {
+        throw new Error('Cannot find task');
+      }
+
+      const times = task.score < 0 ? Math.abs(task.score) : task.score + 1;
+
       const users = await ctx.prisma.user.findMany();
       const user = users.find(u => u.id === ctx.session.user.id);
       const otherUser = users.find(u => u.id !== ctx.session.user.id);
 
-      if (!task || !user || !otherUser) {
+      if (!user || !otherUser) {
         throw new Error('Cannot find task or user.');
       }
 
@@ -199,13 +205,22 @@ export const tasksRouter = router({
         },
       });
 
+      const assignedUser = task.score < 0 ? users.find(u => u.sign === Positive) : users.find(u => u.sign === Negative);
+      const isAssignedToUser = assignedUser?.id === user.id;
+      const heading = !isAssignedToUser || times > 1 ? `${user.displayName} completed ${task.title}` : `${task.title} was assigned to you`;
+      const content = isAssignedToUser
+        ? times > 1
+          ? `They have ${times - 1} turns left`
+          : `${user.displayName} completed the task`
+        : `You now have to complete the task ${times + 1} times`;
+
       await signal
         .createNotification({
           chrome_web_icon: 'https://todo.3pounds.cyou/favicon.ico',
-          headings: { en: `✅ ${task.title}` },
+          headings: { en: heading },
           url: `https://demo.3pounds.cyou/chores/${task.id}`,
           contents: {
-            en: `${user.displayName} completed '${task.title}`,
+            en: content,
           },
           include_external_user_ids: [otherUser.id],
         })

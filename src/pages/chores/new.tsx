@@ -11,7 +11,7 @@ const NewChore: NextPageWithLayout = () => {
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <form
-        className="mt-5 flex w-72 flex-col space-y-2"
+        className="mt-5 flex w-full flex-col space-y-3"
         onSubmit={(form: FormEvent<HTMLFormElement & { title: HTMLInputElement; frequency: HTMLInputElement }>) => {
           createTask.mutateAsync(
             {
@@ -31,11 +31,16 @@ const NewChore: NextPageWithLayout = () => {
           form.preventDefault();
         }}
       >
-        <input className="input" autoFocus type="text" name="title" placeholder="Title" />
-        <input className="input" type="number" name="frequency" placeholder="Frequency in hours" />
-        <button className="btn" type="submit">
-          Create
-        </button>
+        <input className="input-bordered input" autoFocus type="text" name="title" placeholder="Title" />
+        <input className="input-bordered input" type="number" name="frequency" placeholder="Frequency in hours" />
+        <div className="grid grid-cols-2 gap-2">
+          <button className="btn-secondary btn" type="submit">
+            Cancel
+          </button>
+          <button className="btn-primary btn" type="submit">
+            Create
+          </button>
+        </div>
       </form>
     </div>
   );
