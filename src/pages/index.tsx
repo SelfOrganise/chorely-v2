@@ -59,7 +59,7 @@ const Chore = forwardRef(
       <div
         key={task.id}
         ref={ref}
-        className="indicator relative flex w-full cursor-pointer items-center justify-between rounded bg-base-200 pb-2 pt-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
+        className="indicator relative flex w-full cursor-pointer items-center justify-between rounded bg-base-300/70 pb-2 pt-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
         onClick={() => push(`/chores/${task.id}`)}
       >
         <div className="w-full">
@@ -70,7 +70,7 @@ const Chore = forwardRef(
           <span className="badge-secondary badge indicator-start indicator-item indicator-top"> {task.times}</span>
         )}
         <button
-          className="btn-ghost btn-square btn right-0 ml-2 bg-base-content bg-opacity-5"
+          className="btn-ghost btn-square btn right-0 ml-2 bg-base-content/10"
           onClick={event => {
             toast.promise(
               completeTask.mutateAsync({ id: task.id }, { onSuccess: () => utils.tasks.getTasks.invalidate() }),
