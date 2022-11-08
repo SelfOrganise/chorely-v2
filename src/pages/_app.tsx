@@ -2,7 +2,7 @@
 import '../styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';
-import type { AppProps, AppType } from 'next/app';
+import type { AppType } from 'next/app';
 import { ReactElement, ReactNode } from 'react';
 import { NextPage } from 'next';
 

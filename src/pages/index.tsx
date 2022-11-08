@@ -1,10 +1,9 @@
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { NextPageWithLayout } from './_app';
 import { getNavLayout } from '../components/NavLayout';
 import { AppRouterTypes, trpc } from '../utils/trpc';
 import { useSession } from 'next-auth/react';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useMemo } from 'react';
 import OneSignal from 'react-onesignal';
 import moment from 'moment';
 import InternalFlipMove from 'react-flip-move';
@@ -27,20 +26,18 @@ const Home: NextPageWithLayout = () => {
   }, [session.data?.user?.id]);
 
   return (
-    <>
-      <div className="relative w-full space-y-5">
-        <FlipMove typeName={null}>
-          <div className="divider">My tasks</div>
-          {tasksAssignedToMe?.map(t => (
-            <Chore task={t} key={t.id} />
-          ))}
-          <div className="divider">Not my problem</div>
-          {otherTasks?.map(t => (
-            <Chore task={t} key={t.id} />
-          ))}
-        </FlipMove>
-      </div>
-    </>
+    <div className="relative w-full space-y-5">
+      <FlipMove typeName={null}>
+        <div className="divider">My tasks</div>
+        {tasksAssignedToMe?.map(t => (
+          <Chore task={t} key={t.id} />
+        ))}
+        <div className="divider">Not my problem</div>
+        {otherTasks?.map(t => (
+          <Chore task={t} key={t.id} />
+        ))}
+      </FlipMove>
+    </div>
   );
 };
 
@@ -52,8 +49,29 @@ const Chore = forwardRef(
     const completeTask = trpc.tasks.completeTask.useMutation();
     const { push } = useRouter();
     const utils = trpc.useContext();
+    const lastCompleted = task.history?.[0]?.createdAt;
 
-    const lastCompleted = task.history?.[0]?.createdAt ? moment(task.history?.[0]?.createdAt).fromNow() : null;
+    const date = useMemo(() => {
+      if (!lastCompleted) {
+        return null;
+      }
+
+      const date = moment(lastCompleted);
+      const defaultDate = <div className="text-xs font-thin text-base-content/50">{date.fromNow()}</div>;
+
+      if (!task.frequency || task.frequency <= 0) {
+        return defaultDate;
+      }
+
+      const dueDate = date.clone().add('hours', task.frequency);
+      if (dueDate.isSameOrAfter(new Date())) {
+        return defaultDate;
+      }
+
+      const timeLate = moment.duration(dueDate.diff(moment()));
+
+      return <div className="text-xs font-semibold text-error">{timeLate.humanize()} late</div>;
+    }, [lastCompleted, task.frequency]);
 
     return (
       <div
@@ -64,10 +82,10 @@ const Chore = forwardRef(
       >
         <div className="w-full">
           <span className="text-base-content/70">{task.title}</span>
-          {lastCompleted && <div className="text-xs font-thin text-base-content/50">{lastCompleted}</div>}
+          {date}
         </div>
         {task.times > 1 && (
-          <span className="badge-secondary badge indicator-start indicator-item indicator-top"> {task.times}</span>
+          <span className="indicator-start badge-secondary badge indicator-item indicator-top"> {task.times}</span>
         )}
         <button
           className="btn-ghost btn-square btn right-0 ml-2 bg-base-content/10"

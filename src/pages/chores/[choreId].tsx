@@ -55,11 +55,18 @@ const ChoreDetail: NextPageWithLayout = () => {
       <form
         className="relative flex flex-col space-y-3 pb-4"
         onSubmit={(form: FormEvent<HTMLFormElement & { title: HTMLInputElement; frequency: HTMLInputElement }>) => {
-          updateChore.mutateAsync({
-            id: chore.data!.id,
-            title: form.currentTarget.title.value,
-            frequency: Number(form.currentTarget.frequency.value) || undefined,
-          });
+          toast.promise(
+            updateChore.mutateAsync({
+              id: chore.data!.id,
+              title: form.currentTarget.title.value,
+              frequency: Number(form.currentTarget.frequency.value) || undefined,
+            }),
+            {
+              loading: <span>Updating {chore.data?.title}</span>,
+              success: <b>Updated {chore.data?.title}</b>,
+              error: <b>Could not update {chore.data?.title}</b>,
+            }
+          );
 
           form.preventDefault();
         }}

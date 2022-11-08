@@ -1,6 +1,8 @@
-import { protectedProcedure, publicProcedure, router } from '../trpc';
+import { protectedProcedure, router } from '../trpc';
 import { z } from 'zod';
 import * as OneSignal from 'onesignal-node';
+import { scoreToTimes } from '../../../utils/taskUtils';
+import invariant from 'tiny-invariant';
 
 const Positive = 1;
 const Negative = -1;
@@ -68,13 +70,8 @@ export const tasksRouter = router({
       },
     });
 
-    if (!history) {
-      throw new Error('Cannot find history item.');
-    }
-
-    if (history.user.id !== ctx.session.user.id) {
-      throw new Error('Cannot find history item.');
-    }
+    invariant(history, 'Cannot find history item.');
+    invariant(history.user.id === ctx.session.user.id, 'Cannot find history item.');
 
     await ctx.prisma.task.update({
       where: {
@@ -98,6 +95,7 @@ export const tasksRouter = router({
         id: true,
         score: true,
         title: true,
+        frequency: true,
         history: {
           select: {
             createdAt: true,
@@ -116,17 +114,18 @@ export const tasksRouter = router({
       },
     });
 
-    const result = tasks.map(t => {
-      const assignedUser = t.score < 0 ? users.find(u => u.sign === Positive) : users.find(u => u.sign === Negative);
+    const positiveUser = users.find(u => u.sign === Positive);
+    const negativeUser = users.find(u => u.sign === Negative);
+
+    return tasks.map(t => {
+      const assignedUser = t.score < 0 ? positiveUser : negativeUser;
 
       return {
         ...t,
-        times: t.score < 0 ? Math.abs(t.score) : t.score + 1,
+        times: scoreToTimes(t.score),
         assignedTo: assignedUser,
       };
     });
-
-    return result;
   }),
 
   getTask: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
@@ -163,7 +162,7 @@ export const tasksRouter = router({
 
     return {
       ...task,
-      times: task.score < 0 ? Math.abs(task.score) : task.score + 1,
+      times: scoreToTimes(task.score),
     };
   }),
 
@@ -180,9 +179,7 @@ export const tasksRouter = router({
         },
       });
 
-      if (!task) {
-        throw new Error('Cannot find task');
-      }
+      invariant(task, 'Cannot find task');
 
       const times = task.score < 0 ? Math.abs(task.score) : task.score + 1;
 
@@ -190,9 +187,8 @@ export const tasksRouter = router({
       const user = users.find(u => u.id === ctx.session.user.id);
       const otherUser = users.find(u => u.id !== ctx.session.user.id);
 
-      if (!user || !otherUser) {
-        throw new Error('Cannot find task or user.');
-      }
+      invariant(user, 'Cannot find user');
+      invariant(otherUser, 'Cannot find user');
 
       await ctx.prisma.task.update({
         where: {
@@ -249,16 +245,12 @@ export const tasksRouter = router({
         },
       });
 
-      if (!task) {
-        throw new Error('Cannot find task');
-      }
+      invariant(task, 'Cannot find task');
 
       const users = await ctx.prisma.user.findMany();
       const assignedUser = task.score < 0 ? users.find(u => u.sign === Positive) : users.find(u => u.sign === Negative);
 
-      if (!assignedUser) {
-        throw new Error('Cannot find assignedUser');
-      }
+      invariant(assignedUser, 'Cannot find assignedUser');
 
       await signal
         .createNotification({
