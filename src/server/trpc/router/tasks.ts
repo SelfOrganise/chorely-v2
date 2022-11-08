@@ -109,7 +109,12 @@ export const tasksRouter = router({
         },
       },
     });
-    const users = await ctx.prisma.user.findMany();
+    const users = await ctx.prisma.user.findMany({
+      select: {
+        id: true,
+        sign: true,
+      },
+    });
 
     const result = tasks.map(t => {
       const assignedUser = t.score < 0 ? users.find(u => u.sign === Positive) : users.find(u => u.sign === Negative);
@@ -227,6 +232,45 @@ export const tasksRouter = router({
         })
         .then(async () => {
           console.log(`Notified: ${otherUser.email} - ${otherUser.id}`);
+        })
+        .catch(console.error);
+    }),
+
+  sendReminder: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!task) {
+        throw new Error('Cannot find task');
+      }
+
+      const users = await ctx.prisma.user.findMany();
+      const assignedUser = task.score < 0 ? users.find(u => u.sign === Positive) : users.find(u => u.sign === Negative);
+
+      if (!assignedUser) {
+        throw new Error('Cannot find assignedUser');
+      }
+
+      await signal
+        .createNotification({
+          headings: { en: `🔔 Task reminder` },
+          url: `${process.env.NEXTAUTH_URL}/chores/${task.id}`,
+          contents: {
+            en: `${task.title} is ready to be started`,
+          },
+          include_external_user_ids: [assignedUser.id],
+        })
+        .then(async () => {
+          console.log(`Notified: ${assignedUser.email} - ${assignedUser.id}`);
         })
         .catch(console.error);
     }),

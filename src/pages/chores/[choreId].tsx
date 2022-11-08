@@ -18,6 +18,7 @@ const ChoreDetail: NextPageWithLayout = () => {
   const updateChore = trpc.tasks.updateTask.useMutation();
   const deleteChore = trpc.tasks.deleteTask.useMutation();
   const undoChore = trpc.tasks.undoTask.useMutation();
+  const sendReminder = trpc.tasks.sendReminder.useMutation();
 
   if (!chore?.data) {
     return <p>Loading...</p>;
@@ -25,12 +26,35 @@ const ChoreDetail: NextPageWithLayout = () => {
 
   return (
     <div className="w-full">
+      <div className="divider">Actions</div>
+      <div className="grid grid-cols-2 gap-2">
+        <button className="btn-secondary btn flex flex-1" onClick={() => router.back()}>
+          Back
+        </button>
+        <button
+          className="btn-secondary btn flex flex-1"
+          onClick={() =>
+            toast.promise(
+              sendReminder.mutateAsync({
+                id: chore.data!.id,
+              }),
+              {
+                loading: <span>Sending reminder</span>,
+                success: <b>Reminder sent</b>,
+                error: <b>Cannot send reminder</b>,
+              }
+            )
+          }
+        >
+          Send reminder
+        </button>
+      </div>
+
       <div className="divider">Edit task</div>
 
       <form
         className="relative flex flex-col space-y-3 pb-4"
         onSubmit={(form: FormEvent<HTMLFormElement & { title: HTMLInputElement; frequency: HTMLInputElement }>) => {
-          debugger;
           updateChore.mutateAsync({
             id: chore.data!.id,
             title: form.currentTarget.title.value,
@@ -85,7 +109,7 @@ const ChoreDetail: NextPageWithLayout = () => {
       <div className="divider">History</div>
 
       <div className="w-full">
-        <table className="table-zebra table w-full">
+        <table className="table-zebra table-compact table w-full">
           <thead>
             <tr>
               <th>Name</th>
