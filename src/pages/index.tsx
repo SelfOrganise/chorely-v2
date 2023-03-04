@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { NextPageWithLayout } from './_app';
 import { getNavLayout } from '../components/NavLayout';
-import { AppRouterTypes, trpc } from '../utils/trpc';
+import { RouterOutput, trpc } from '../utils/trpc';
 import { useSession } from 'next-auth/react';
 import { forwardRef, useEffect, useMemo } from 'react';
 import OneSignal from 'react-onesignal';
@@ -44,78 +44,76 @@ const Home: NextPageWithLayout = () => {
 Home.getLayout = getNavLayout;
 
 // eslint-disable-next-line react/display-name
-const Chore = forwardRef(
-  ({ task }: { task: AppRouterTypes['tasks']['getTasks']['output'][number] }, ref: any): JSX.Element => {
-    const completeTask = trpc.tasks.completeTask.useMutation();
-    const { push } = useRouter();
-    const utils = trpc.useContext();
-    const lastCompleted = task.history?.[0]?.createdAt;
+const Chore = forwardRef(({ task }: { task: RouterOutput['tasks']['getTasks'][number] }, ref: any): JSX.Element => {
+  const completeTask = trpc.tasks.completeTask.useMutation();
+  const { push } = useRouter();
+  const utils = trpc.useContext();
+  const lastCompleted = task.history?.[0]?.createdAt;
 
-    const date = useMemo(() => {
-      if (!lastCompleted) {
-        return null;
-      }
+  const date = useMemo(() => {
+    if (!lastCompleted) {
+      return null;
+    }
 
-      const date = moment(lastCompleted);
-      const defaultDate = <div className="text-xs font-thin text-base-content/50">{date.fromNow()}</div>;
+    const date = moment(lastCompleted);
+    const defaultDate = <div className="text-xs font-thin text-base-content/50">{date.fromNow()}</div>;
 
-      if (!task.frequency || task.frequency <= 0) {
-        return defaultDate;
-      }
+    if (!task.frequency || task.frequency <= 0) {
+      return defaultDate;
+    }
 
-      const dueDate = date.clone().add('hours', task.frequency);
-      if (dueDate.isSameOrAfter(new Date())) {
-        return defaultDate;
-      }
+    const dueDate = date.clone().add('hours', task.frequency);
+    if (dueDate.isSameOrAfter(new Date())) {
+      return defaultDate;
+    }
 
-      const timeLate = moment.duration(dueDate.diff(moment()));
+    const timeLate = moment.duration(dueDate.diff(moment()));
 
-      return <div className="text-xs font-semibold text-error">{timeLate.humanize()} late</div>;
-    }, [lastCompleted, task.frequency]);
+    return <div className="text-xs font-semibold text-error">{timeLate.humanize()} late</div>;
+  }, [lastCompleted, task.frequency]);
 
-    return (
-      <div
-        key={task.id}
-        ref={ref}
-        className="indicator relative flex w-full cursor-pointer items-center justify-between rounded bg-base-300/70 pb-2 pt-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
-        onClick={() => push(`/chores/${task.id}`)}
-      >
-        <div className="w-full">
-          <span className="text-base-content/70">{task.title}</span>
-          {date}
-        </div>
-        {task.times > 1 && (
-          <span className="indicator-start badge-secondary badge indicator-item indicator-top"> {task.times}</span>
-        )}
-        <button
-          className="btn-ghost btn-square btn right-0 ml-2 bg-base-content/10"
-          onClick={event => {
-            toast.promise(
-              completeTask.mutateAsync({ id: task.id }, { onSuccess: () => utils.tasks.getTasks.invalidate() }),
-              {
-                loading: <span>Completing {task?.title}</span>,
-                success: <b>Completed {task?.title}</b>,
-                error: <b>Could not complete {task?.title}</b>,
-              }
-            );
-            event.stopPropagation();
-            event.preventDefault();
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-          </svg>
-        </button>
+  return (
+    <div
+      key={task.id}
+      ref={ref}
+      className="indicator relative flex w-full cursor-pointer items-center justify-between rounded bg-base-300/70 pb-2 pt-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300"
+      onClick={() => push(`/chores/${task.id}`)}
+    >
+      <div className="w-full">
+        <span className="text-base-content/70">{task.title}</span>
+        {date}
       </div>
-    );
-  }
-);
+      {task.times > 1 && (
+        <span className="indicator-start badge-secondary badge indicator-item indicator-top"> {task.times}</span>
+      )}
+      <button
+        className="btn-ghost btn-square btn right-0 ml-2 bg-base-content/10"
+        onClick={event => {
+          toast.promise(
+            completeTask.mutateAsync({ id: task.id }, { onSuccess: () => utils.tasks.getTasks.invalidate() }),
+            {
+              loading: <span>Completing {task?.title}</span>,
+              success: <b>Completed {task?.title}</b>,
+              error: <b>Could not complete {task?.title}</b>,
+            }
+          );
+          event.stopPropagation();
+          event.preventDefault();
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="h-6 w-6"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+      </button>
+    </div>
+  );
+});
 
 export default Home;
