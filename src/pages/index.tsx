@@ -22,7 +22,7 @@ const Home: NextPageWithLayout = () => {
       return;
     }
 
-    OneSignal.setExternalUserId(session.data?.user?.id);
+    OneSignal.login(session.data?.user?.id);
   }, [session.data?.user?.id]);
 
   return (
