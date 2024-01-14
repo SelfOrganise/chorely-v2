@@ -1,4 +1,6 @@
-import { default as nextAuthMiddleware, WithAuthArgs } from 'next-auth/middleware';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { default as nextAuthMiddleware } from 'next-auth/middleware';
 import { NextRequest } from 'next/server';
 
 export default function middleware(...args: any): unknown {

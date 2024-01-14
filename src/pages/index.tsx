@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useRouter } from 'next/router';
 import { NextPageWithLayout } from './_app';
 import { getNavLayout } from '../components/NavLayout';

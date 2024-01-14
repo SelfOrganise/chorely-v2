@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { NavBar } from './NavBar';
-import { useRouter } from 'next/router';
 
 export function NavLayout({ children }: React.PropsWithChildren): JSX.Element {
   const [theme, setTheme] = useState('cupcake');

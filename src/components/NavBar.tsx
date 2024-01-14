@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
@@ -35,7 +35,7 @@ const themes = [
   'winter',
 ];
 
-export function NavBar({ theme, onThemeChange }: { theme: string; onThemeChange: (t: string) => void }): JSX.Element {
+export function NavBar({ onThemeChange }: { theme: string; onThemeChange: (t: string) => void }): JSX.Element {
   const router = useRouter();
   const session = useSession();
 

@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useCallback, useEffect, useRef } from 'react';
 import OneSignal from 'react-onesignal';
-
-const isProd = process.env.NODE_ENV === 'production';
 
 export function useOneSignal() {
   const isInitialized = useRef(false);
@@ -17,8 +17,6 @@ export function useOneSignal() {
         console.log('Could not process:', e.action);
         return;
       }
-
-      const [action, id] = split;
     });
   }, []);
 
