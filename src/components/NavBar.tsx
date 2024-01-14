@@ -114,7 +114,7 @@ export function NavBar({ onThemeChange }: { theme: string; onThemeChange: (t: st
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content menu rounded-box menu-compact mt-3 h-[200px] w-52 flex-nowrap overflow-auto bg-base-100 p-2 shadow"
+          className="dropdown-content menu rounded-box menu-compact mt-3 h-[200px] w-52 flex-nowrap overflow-auto bg-base-100 p-2 shadow z-10"
         >
           {themes.map(t => (
             <li onClick={() => onThemeChange(t)} className="justify-between" key={t} value={t}>
