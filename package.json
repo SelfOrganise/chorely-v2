@@ -2,6 +2,7 @@
   "name": "chorely-t3",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "dev:notify": "ts-node-transpile-only ./watcher.ts",
@@ -40,6 +41,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
@@ -48,13 +50,17 @@
     "autoprefixer": "^10.4.16",
     "esbuild": "^0.20.2",
     "eslint": "^9.0.0",
-    "eslint-config-next": "^14.2.1",
+    "eslint-config-next": "^14.0.4",
     "postcss": "^8.4.33",
     "prettier": "^3.2.1",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "prisma": "^5.8.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.6.0"
+  },
+  "resolutions": {
+    "strip-ansi": "6.0.1"
   },
   "ct3aMetadata": {
     "initVersion": "6.5.2"

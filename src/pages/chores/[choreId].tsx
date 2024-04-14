@@ -15,10 +15,12 @@ const ChoreDetail: NextPageWithLayout = () => {
     enabled: Boolean(router.query.choreId),
     cacheTime: 0,
   });
+
   const updateChore = trpc.tasks.updateTask.useMutation();
   const deleteChore = trpc.tasks.deleteTask.useMutation();
   const undoChore = trpc.tasks.undoTask.useMutation();
   const sendReminder = trpc.tasks.sendReminder.useMutation();
+  const toggleArchived = trpc.tasks.toggleArchived.useMutation();
 
   if (!chore?.data) {
     return <p>Loading...</p>;
@@ -27,7 +29,7 @@ const ChoreDetail: NextPageWithLayout = () => {
   return (
     <div className="w-full">
       <div className="divider">Actions</div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <button className="btn-secondary btn flex flex-1" onClick={() => router.back()}>
           Back
         </button>
@@ -47,6 +49,38 @@ const ChoreDetail: NextPageWithLayout = () => {
           }
         >
           Send reminder
+        </button>
+        <button
+          className="btn-secondary btn flex flex-1"
+          onClick={() =>
+            toast.promise(
+              toggleArchived.mutateAsync(
+                {
+                  id: chore.data!.id,
+                },
+                {
+                  onSuccess: () => {
+                    context.tasks.getTask.invalidate(chore.data!.id);
+                  },
+                }
+              ),
+              {
+                loading: (
+                  <span>
+                    {chore?.data?.archived ? 'Unarchiving' : 'Archiving'} {chore.data?.title}
+                  </span>
+                ),
+                success: (
+                  <b>
+                    {chore?.data?.archived ? 'Unarchived' : 'Archived'} {chore.data?.title}
+                  </b>
+                ),
+                error: <b>Could not toggleArchived {chore.data?.title}</b>,
+              }
+            )
+          }
+        >
+          {chore.data.archived ? 'Unarchive' : 'Archive'}
         </button>
       </div>
 

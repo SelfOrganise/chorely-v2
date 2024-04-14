@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useRouter } from 'next/router';
+import { useStore } from '../store/useStore';
 import { NextPageWithLayout } from './_app';
 import { getNavLayout } from '../components/NavLayout';
 import { RouterOutput, trpc } from '../utils/trpc';
@@ -15,7 +16,10 @@ const FlipMove: any = InternalFlipMove;
 
 const Home: NextPageWithLayout = () => {
   const session = useSession();
-  const tasks = trpc.tasks.getTasks.useQuery();
+  const showArchived = useStore(s => s.showArchived);
+  const tasks = trpc.tasks.getTasks.useQuery({
+    includeArchived: showArchived,
+  });
   const tasksAssignedToMe = tasks.data?.filter(t => t.assignedTo?.id === session.data?.user?.id);
   const otherTasks = tasks.data?.filter(t => t.assignedTo?.id !== session.data?.user?.id);
 
@@ -31,13 +35,9 @@ const Home: NextPageWithLayout = () => {
     <div className="relative w-full space-y-5">
       <FlipMove typeName={null}>
         <div className="divider">My tasks</div>
-        {tasksAssignedToMe?.map(t => (
-          <Chore task={t} key={t.id} />
-        ))}
+        {tasksAssignedToMe?.map(t => <Chore task={t} key={t.id} />)}
         <div className="divider">Not my problem</div>
-        {otherTasks?.map(t => (
-          <Chore task={t} key={t.id} />
-        ))}
+        {otherTasks?.map(t => <Chore task={t} key={t.id} />)}
       </FlipMove>
     </div>
   );

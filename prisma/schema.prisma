@@ -30,14 +30,15 @@ model Task {
    frequency     Int?
    score         Int       @default(0)
    lastCompleted DateTime  @default(now())
+   archived      Boolean   @default(false)
 }
 
 model History {
    id           String      @id @default(uuid())
    taskId       String
-   task         Task        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+   task         Task        @relation(fields: [taskId], references: [id], onDelete: NoAction)
    userId       String
-   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+   user         User        @relation(fields: [userId], references: [id], onDelete: NoAction)
    createdAt    DateTime    @default(now())
 
    @@index([createdAt(sort: Desc)])

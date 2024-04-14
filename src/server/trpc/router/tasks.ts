@@ -89,44 +89,50 @@ export const tasksRouter = router({
     });
   }),
 
-  getTasks: protectedProcedure.query(async ({ ctx }) => {
-    const tasks = await ctx.prisma.task.findMany({
-      select: {
-        id: true,
-        score: true,
-        title: true,
-        frequency: true,
-        history: {
-          select: {
-            createdAt: true,
-          },
-          take: 1,
-          orderBy: {
-            createdAt: 'desc',
+  getTasks: protectedProcedure
+    .input(z.object({ includeArchived: z.boolean().optional() }).optional())
+    .query(async ({ input, ctx }) => {
+      const tasks = await ctx.prisma.task.findMany({
+        select: {
+          id: true,
+          score: true,
+          title: true,
+          frequency: true,
+          history: {
+            select: {
+              createdAt: true,
+            },
+            take: 1,
+            orderBy: {
+              createdAt: 'desc',
+            },
           },
         },
-      },
-    });
-    const users = await ctx.prisma.user.findMany({
-      select: {
-        id: true,
-        sign: true,
-      },
-    });
+        where: {
+          archived: input?.includeArchived ? undefined : false,
+        },
+      });
 
-    const positiveUser = users.find(u => u.sign === Positive);
-    const negativeUser = users.find(u => u.sign === Negative);
+      const users = await ctx.prisma.user.findMany({
+        select: {
+          id: true,
+          sign: true,
+        },
+      });
 
-    return tasks.map(t => {
-      const assignedUser = t.score < 0 ? positiveUser : negativeUser;
+      const positiveUser = users.find(u => u.sign === Positive);
+      const negativeUser = users.find(u => u.sign === Negative);
 
-      return {
-        ...t,
-        times: scoreToTimes(t.score),
-        assignedTo: assignedUser,
-      };
-    });
-  }),
+      return tasks.map(t => {
+        const assignedUser = t.score < 0 ? positiveUser : negativeUser;
+
+        return {
+          ...t,
+          times: scoreToTimes(t.score),
+          assignedTo: assignedUser,
+        };
+      });
+    }),
 
   getTask: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
     const task = await ctx.prisma.task.findUnique({
@@ -138,6 +144,7 @@ export const tasksRouter = router({
         title: true,
         frequency: true,
         score: true,
+        archived: true,
         history: {
           orderBy: {
             createdAt: 'desc',
@@ -226,7 +233,7 @@ export const tasksRouter = router({
           },
           include_external_user_ids: [otherUser.id],
         })
-        .then(async () => {
+        .then(() => {
           console.log(`Notified: ${otherUser.email} - ${otherUser.id}`);
         })
         .catch(console.error);
@@ -261,9 +268,34 @@ export const tasksRouter = router({
           },
           include_external_user_ids: [assignedUser.id],
         })
-        .then(async () => {
+        .then(() => {
           console.log(`Notified: ${assignedUser.email} - ${assignedUser.id}`);
         })
         .catch(console.error);
+    }),
+
+  toggleArchived: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      invariant(task, 'Cannot find task');
+
+      await ctx.prisma.task.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          archived: !task.archived,
+        },
+      });
     }),
 });
