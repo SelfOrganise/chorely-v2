@@ -31,6 +31,11 @@ const Home: NextPageWithLayout = () => {
     OneSignal.login(session.data?.user?.id);
   }, [session.data?.user?.id]);
 
+  if (!tasks?.data?.length) {
+    // note: workaround FlipMove not displaying correct data when showArchived is set to true for the first time
+    return null;
+  }
+
   return (
     <div className="relative w-full space-y-5">
       <FlipMove typeName={null}>
