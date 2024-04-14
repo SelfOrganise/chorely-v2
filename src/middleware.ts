@@ -22,5 +22,6 @@ export default function middleware(...args: any): unknown {
     }
   }
 
-  return nextAuthMiddleware(...args);
+  // eslint-disable-next-line prefer-spread
+  return nextAuthMiddleware.apply(null, args);
 }
