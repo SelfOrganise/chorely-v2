@@ -1,5 +1,3 @@
-'use server';
-
 import { prisma } from '../../utils/prisma';
 import { scoreToTimes, Positive, Negative } from '../../utils/taskUtils';
 
