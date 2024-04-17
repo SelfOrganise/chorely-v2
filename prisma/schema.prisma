@@ -21,6 +21,7 @@ model User {
    password      String
    history       History[]
    sign          Int
+   theme         String    @default("")
 }
 
 model Task {
