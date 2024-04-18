@@ -1,9 +1,10 @@
 'use server';
 
-import { prisma } from '../../../../utils/prisma';
-import { scoreToTimes } from '../../../../utils/taskUtils';
+import { cache } from 'react';
+import { prisma } from '../../utils/prisma';
+import { scoreToTimes } from '../../utils/taskUtils';
 
-export async function getTask({ id }: { id: string }) {
+export const getTask = cache(async ({ id }: { id: string }) => {
   const task = await prisma.task.findUnique({
     where: {
       id,
@@ -40,4 +41,4 @@ export async function getTask({ id }: { id: string }) {
     ...task,
     times: scoreToTimes(task.score),
   };
-}
+});

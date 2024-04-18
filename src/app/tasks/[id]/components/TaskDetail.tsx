@@ -7,7 +7,7 @@ import { deleteTask } from '../../../actions/deleteTask';
 import { toggleArchived } from '../../../actions/toggleArchived';
 import { undoTask } from '../../../actions/undoTask';
 import { updateTask } from '../../../actions/updateTask';
-import type { getTask } from '../actions/getTask';
+import type { getTask } from '../../../actions/getTask';
 import { useRouter } from 'next/navigation';
 
 export function TaskDetail({
@@ -24,9 +24,13 @@ export function TaskDetail({
       <div className="divider">Actions</div>
       <div className="grid grid-cols-2 gap-2">
         <button
-          className="btn-secondary btn flex flex-1"
+          className="btn-error btn flex flex-1"
           onClick={async event => {
             event.preventDefault();
+            if (!confirm(`Archive "${task.title}"?`)) {
+              return;
+            }
+
             await toast.promise(toggleArchived(task.id), {
               loading: (
                 <span>
@@ -48,7 +52,7 @@ export function TaskDetail({
           className="btn-error btn flex flex-1"
           onClick={async event => {
             event.preventDefault();
-            if (!confirm(`Delete ${task.title}`)) {
+            if (!confirm(`Delete "${task.title}"?`)) {
               return;
             }
 

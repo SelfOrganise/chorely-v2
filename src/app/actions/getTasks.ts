@@ -1,7 +1,8 @@
+import { cache } from 'react';
 import { prisma } from '../../utils/prisma';
 import { scoreToTimes, Positive, Negative } from '../../utils/taskUtils';
 
-export async function getTasks({ includeArchived }: { includeArchived?: boolean } = {}) {
+export const getTasks = cache(async ({ includeArchived }: { includeArchived?: boolean } = {}) => {
   const tasks = await prisma.task.findMany({
     select: {
       id: true,
@@ -43,4 +44,4 @@ export async function getTasks({ includeArchived }: { includeArchived?: boolean 
       assignedTo: assignedUser,
     };
   });
-}
+});
