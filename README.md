@@ -1,3 +1,3 @@
-Simple task tracking app which I keep iterating to play with new tech :)
+Simple task tracking app playground for new tech :)
 
-Stack: next, typescript, react server components, server actions, SQLite, docker, prisma, tailwind, PWA, OneSignal (web push)
+Current stack: next, react server components, server actions, NextAuth, SQLite, docker, prisma, tailwind, PWA, OneSignal (web push), typescript
