@@ -30,6 +30,10 @@ export function TaskDetail({
           className={classNames(!task && 'skeleton', 'btn-error btn flex flex-1')}
           onClick={async event => {
             event.preventDefault();
+            if (!task) {
+              return;
+            }
+
             if (!confirm(`Archive "${task?.title}"?`)) {
               return;
             }
@@ -56,6 +60,10 @@ export function TaskDetail({
           className={classNames(!task && 'skeleton', 'btn-error btn flex flex-1')}
           onClick={async event => {
             event.preventDefault();
+            if (!task) {
+              return;
+            }
+
             if (!confirm(`Delete "${task?.title}"?`)) {
               return;
             }
@@ -105,7 +113,7 @@ export function TaskDetail({
             placeholder="Title"
             defaultValue={task?.title}
           />
-          {task?.times > 1 && (
+          {task && task?.times > 1 && (
             <div className="indicator-start badge-secondary badge indicator-item indicator-top">{task?.times}</div>
           )}
         </div>
