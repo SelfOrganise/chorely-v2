@@ -1,12 +1,10 @@
-'use server';
-
 import { getServerSession } from 'next-auth';
 import { Suspense, ReactNode } from 'react';
 import { authOptions } from '../utils/authOptions';
 import { TaskCard } from './components/TaskCard';
 import { getTasks } from './actions/getTasks';
 
-export default async function Tasks({ searchParams }: { searchParams: { showArchived?: string } }) {
+export default function Tasks({ searchParams }: { searchParams: { showArchived?: string } }) {
   const includeArchived = searchParams.showArchived === 'true';
   return (
     <div className="relative w-full space-y-5">

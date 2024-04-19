@@ -1,5 +1,6 @@
 'use server';
 
+import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { prisma } from '../../utils/prisma';
 import { scoreToTimes } from '../../utils/taskUtils';
@@ -34,7 +35,7 @@ export const getTask = cache(async ({ id }: { id: string }) => {
   });
 
   if (!task) {
-    return task;
+    notFound();
   }
 
   return {
