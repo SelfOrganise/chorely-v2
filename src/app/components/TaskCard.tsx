@@ -80,7 +80,7 @@ export const TaskCard = forwardRef(({ task }: { task: Awaited<ReturnType<typeof 
           event.stopPropagation();
           event.preventDefault();
 
-          let comment: string = '';
+          let comment: string | null = '';
           if (task.requiresComment) {
             comment = prompt(`Please add a comment for completing "${task?.title}".`);
 
