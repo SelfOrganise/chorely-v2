@@ -86,7 +86,13 @@ export function TaskDetail({
       <form
         className="relative flex flex-col space-y-3 pb-4"
         onSubmit={async (
-          form: FormEvent<HTMLFormElement & { title: HTMLInputElement; frequency: HTMLInputElement }>
+          form: FormEvent<
+            HTMLFormElement & {
+              title: HTMLInputElement;
+              frequency: HTMLInputElement;
+              'required-comment': HTMLInputElement;
+            }
+          >
         ) => {
           form.preventDefault();
 
@@ -95,6 +101,7 @@ export function TaskDetail({
               id: task?.id,
               title: form.currentTarget.title.value,
               frequency: Number(form.currentTarget.frequency.value) || undefined,
+              requiresComment: form.currentTarget['required-comment'].checked,
             }),
             {
               loading: <span>Updating {task?.title}</span>,
@@ -125,6 +132,18 @@ export function TaskDetail({
           placeholder="Frequency in hours"
           defaultValue={task?.frequency || undefined}
         />
+        <div className="flex align-middle justify-end space-x-2">
+          <label htmlFor="required-comment" className="select-none">
+            Requires comment:
+          </label>
+          <input
+            disabled={!task}
+            id="required-comment"
+            className={classNames(!task && 'skeleton', 'checkbox')}
+            type="checkbox"
+            defaultChecked={task?.requiresComment}
+          />
+        </div>
         <div className="grid grid-cols-2 gap-2">
           <button
             className={classNames(!task && 'skeleton', 'btn-secondary btn flex flex-1')}
@@ -154,6 +173,7 @@ export function TaskDetail({
             <tr>
               <th>Name</th>
               <th className="text-center">Date</th>
+              <th>Comment</th>
               <th className="w-2 text-center">Undo</th>
             </tr>
           </thead>
@@ -164,6 +184,7 @@ export function TaskDetail({
                 <tr key={h.createdAt.getTime()}>
                   <td>{h.user.displayName}</td>
                   <td className="text-center">{moment(h.createdAt).fromNow()}</td>
+                  <td>{h.comment}</td>
                   <td className="w-fit">
                     {h.user.id === userId && (
                       <button

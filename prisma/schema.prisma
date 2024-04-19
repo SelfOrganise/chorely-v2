@@ -25,13 +25,14 @@ model User {
 }
 
 model Task {
-   id            String    @id @default(uuid())
-   title         String
-   history       History[]
-   frequency     Int?
-   score         Int       @default(0)
-   lastCompleted DateTime  @default(now())
-   archived      Boolean   @default(false)
+   id               String    @id @default(uuid())
+   title            String
+   history          History[]
+   frequency        Int?
+   score            Int       @default(0)
+   lastCompleted    DateTime  @default(now())
+   archived         Boolean   @default(false)
+   requiresComment  Boolean @default(false)
 }
 
 model History {
@@ -41,6 +42,7 @@ model History {
    userId       String
    user         User        @relation(fields: [userId], references: [id], onDelete: NoAction)
    createdAt    DateTime    @default(now())
+   comment      String      @default("")
 
    @@index([createdAt(sort: Desc)])
 }

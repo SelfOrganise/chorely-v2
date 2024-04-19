@@ -16,6 +16,7 @@ export const getTask = cache(async ({ id }: { id: string }) => {
       frequency: true,
       score: true,
       archived: true,
+      requiresComment: true,
       history: {
         orderBy: {
           createdAt: 'desc',
@@ -23,6 +24,7 @@ export const getTask = cache(async ({ id }: { id: string }) => {
         select: {
           id: true,
           createdAt: true,
+          comment: true,
           user: {
             select: {
               id: true,

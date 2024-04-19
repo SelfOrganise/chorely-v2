@@ -6,7 +6,7 @@ import invariant from 'tiny-invariant';
 import { authOptions } from '../../utils/authOptions';
 import { prisma } from '../../utils/prisma';
 
-export async function completeTask(id: string) {
+export async function completeTask(id: string, comment: string) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
 
@@ -40,6 +40,7 @@ export async function completeTask(id: string) {
     data: {
       taskId: id,
       userId,
+      comment,
     },
   });
 
