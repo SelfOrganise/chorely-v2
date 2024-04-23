@@ -85,8 +85,12 @@ export const TaskCard = forwardRef(({ task }: { task: Awaited<ReturnType<typeof 
           if (task.requiresComment) {
             comment = prompt(`Please add a comment for completing "${task?.title}".`);
 
-            if (!comment || comment.length <= 3) {
-              alert('Comment must be at least 2 characters long');
+            if (comment === null) {
+              return;
+            }
+
+            if (comment.length <= 3) {
+              alert('Comment must be at least 3 characters long, mate.');
               return;
             }
           }
