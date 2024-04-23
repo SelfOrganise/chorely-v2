@@ -61,6 +61,7 @@ export const TaskCard = forwardRef(({ task }: { task: Awaited<ReturnType<typeof 
   return (
     <Link
       key={task.id}
+      scroll={true}
       className={classNames(
         task.archived && 'grayscale opacity-50',
         'indicator relative flex w-full cursor-pointer items-center justify-between rounded bg-base-300/70 pb-2 pt-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300'
