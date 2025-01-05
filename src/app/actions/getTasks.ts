@@ -28,6 +28,7 @@ export const getTasks = cache(async ({ includeArchived }: { includeArchived?: bo
 
   const users = await prisma.user.findMany({
     select: {
+      displayName: true,
       id: true,
       sign: true,
     },
