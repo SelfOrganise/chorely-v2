@@ -10,12 +10,12 @@ const myPersonId =
 
 const skill = SkillBuilders.custom()
   .addRequestHandlers({
-    canHandle: input => {
-      return input.requestEnvelope.request.type === 'IntentRequest';
-    },
+    canHandle: () => true,
     handle: async input => {
+      console.log(JSON.stringify(input.requestEnvelope, null, 2));
+
       if (input.requestEnvelope.request.type !== 'IntentRequest') {
-        return error('Unsupported operation');
+        return error(`Unsupported operation: ${input.requestEnvelope.request.type}.`);
       }
 
       const choreInput = input.requestEnvelope.request.intent.slots?.chore?.value;
@@ -38,11 +38,11 @@ const skill = SkillBuilders.custom()
       }
 
       function handleChoreInfo() {
-        return input.responseBuilder
-          .speak(
-            `${fixTaskTitle(task!.title)}: ${resolveName(task!.assignedTo?.displayName || 'Unknown')}, ${task!.times} time${task!.times > 1 ? 's' : ''}.`
-          )
-          .getResponse();
+        const times = task!.times > 0 ? `, ${task!.times} times.` : '';
+        const name = resolveName(task!.assignedTo?.displayName || 'Unknown');
+        const title = fixTaskTitle(task!.title);
+
+        return input.responseBuilder.speak(`${title}: ${name}${times}.`).getResponse();
       }
 
       async function handleChoreComplete() {
@@ -66,7 +66,7 @@ const skill = SkillBuilders.custom()
       }
 
       function error(msg: string) {
-        console.log(msg, JSON.stringify(input.requestEnvelope, null, 2));
+        console.error(msg, JSON.stringify(input.requestEnvelope, null, 2));
         return input.responseBuilder.speak(msg).getResponse();
       }
     },
