@@ -9,9 +9,12 @@ import { prisma } from '../../utils/prisma';
 export async function completeTask(id: string, comment: string) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
-
   invariant(userId, 'Missing userId');
 
+  return await completeTaskInternal(userId, id, comment);
+}
+
+export async function completeTaskInternal(userId: string, id: string, comment: string) {
   const task = await prisma.task.findUnique({
     where: {
       id,

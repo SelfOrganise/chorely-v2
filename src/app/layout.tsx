@@ -6,7 +6,7 @@ import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import invariant from 'tiny-invariant';
 import { NavBar } from './components/NavBar';
-import { getCurrentUser } from './actions/getCurrentUser';
+import { getCurrentUser } from './actions/getUser';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();

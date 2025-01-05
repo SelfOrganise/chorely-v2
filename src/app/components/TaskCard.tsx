@@ -48,7 +48,7 @@ export const TaskCard = forwardRef(({ task }: { task: Awaited<ReturnType<typeof 
       return defaultDate;
     }
 
-    const dueDate = date.clone().add('hours', task.frequency);
+    const dueDate = date.clone().add(task.frequency, 'hours');
     if (dueDate.isSameOrAfter(new Date())) {
       return defaultDate;
     }

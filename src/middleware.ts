@@ -10,7 +10,7 @@ export default function middleware(...args: any): unknown {
     const publicPaths = [
       '/auth',
       '/secret/signup',
-      '/api/trpc',
+      '/api/alexa',
       '/api/auth',
       '/manifest.json',
       '/favicon',
