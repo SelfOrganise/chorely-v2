@@ -72,6 +72,11 @@ const skill = SkillBuilders.custom()
     },
   })
   .create();
+
+export function GET() {
+  return new Response('OK', { status: 200 });
+}
+
 export async function POST(request: NextRequest) {
   const body = (await request.json()) as RequestEnvelope;
   const response = await skill.invoke(body);
