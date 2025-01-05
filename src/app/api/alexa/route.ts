@@ -18,7 +18,9 @@ const skill = SkillBuilders.custom()
         return error(`Unsupported operation: ${input.requestEnvelope.request.type}.`);
       }
 
-      const choreInput = input.requestEnvelope.request.intent.slots?.chore?.value;
+      const choreInput =
+        input.requestEnvelope.request.intent.slots?.chore?.resolutions?.resolutionsPerAuthority?.[0]?.values?.[0]?.value
+          .name || input.requestEnvelope.request.intent.slots?.chore?.value;
       if (!choreInput) {
         return error("I don't understand the chore name");
       }
@@ -38,7 +40,7 @@ const skill = SkillBuilders.custom()
       }
 
       function handleChoreInfo() {
-        const times = task!.times > 0 ? `, ${task!.times} times.` : '';
+        const times = task!.times != 1 ? `, ${task!.times} times.` : '';
         const name = resolveName(task!.assignedTo?.displayName || 'Unknown');
         const title = fixTaskTitle(task!.title);
 
