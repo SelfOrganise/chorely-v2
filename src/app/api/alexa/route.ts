@@ -90,25 +90,28 @@ export async function POST(request: NextRequest) {
 }
 
 function resolveName(name: string) {
-  return name === 'Xingu' ? 'Xing' : name;
+  return name === 'Xingu' ? 'Zing' : name;
 }
 
 function fixTaskTitle(title: string) {
   // eslint-disable-next-line no-control-regex
-  return title.replace(/[^\x00-\x7F]/g, '');
+  return title.replace(/[^\x00-\x7F]/g, '').trim();
 }
 
 async function tryFindTask(slotValue: string) {
   const tasks = await getTasks();
   const parts = slotValue.toLowerCase().split(/\s+/);
 
-  return (
-    tasks
-      .map(t => {
-        const titleWords = t.title.toLowerCase().split(/\s+/);
-        const matchScore = parts.reduce((score, part) => score + (titleWords.includes(part) ? 1 : 0), 0);
-        return { task: t, matchScore };
-      })
-      .sort((a, b) => b.matchScore - a.matchScore)[0]?.task || null
-  );
+  const sorted = tasks
+    .map(t => {
+      const titleWords = [...new Set(t.title.toLowerCase().split(/\s+/))];
+      const matchScore = parts.reduce(
+        (score, part) => score + titleWords.filter(titleWord => titleWord.includes(part)).length,
+        0
+      );
+      return { task: t, matchScore };
+    })
+    .sort((a, b) => b.matchScore - a.matchScore);
+
+  return sorted[0]?.task || null;
 }
