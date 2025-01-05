@@ -26,7 +26,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ENV NEXT_PUBLIC_ONE_SIGNAL_APP 067ca6e5-36c8-4647-8ca9-e503ee0119da
 
 RUN yarn build
-RUN yarn build:notify
+# RUN yarn build:notify
 
 # If using npm comment out above and use below instead
 # RUN npm run build

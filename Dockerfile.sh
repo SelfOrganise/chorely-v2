@@ -1,7 +1,7 @@
 #!/bin/sh
 
-node watcher.js &
-echo 'executed "node watcher.js"';
+#node watcher.js &
+#echo 'executed "node watcher.js"';
 
 node server.js &
 echo 'executed "node server"';
