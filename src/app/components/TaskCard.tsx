@@ -3,7 +3,7 @@
 import classNames from 'classnames';
 import moment from 'moment/moment';
 import Link from 'next/link';
-import { forwardRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { completeTask } from '../actions/completeTask';
 import type { getTasks } from '../actions/getTasks';
@@ -33,7 +33,7 @@ const checkIcon = (
   </svg>
 );
 
-export const TaskCard = forwardRef(({ task }: { task: Awaited<ReturnType<typeof getTasks>>[number] }): JSX.Element => {
+export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[number] }): JSX.Element => {
   const lastCompleted = task.history?.[0]?.createdAt;
 
   const date = useMemo(() => {
@@ -106,4 +106,4 @@ export const TaskCard = forwardRef(({ task }: { task: Awaited<ReturnType<typeof 
       </button>
     </Link>
   );
-});
+};
