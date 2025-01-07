@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server';
 import { completeTaskInternal } from '../../actions/completeTask';
-import { SkillBuilders } from 'ask-sdk';
+import { getIntentName, SkillBuilders } from 'ask-sdk';
 import { RequestEnvelope } from 'ask-sdk-model';
 import { prisma } from '../../../utils/prisma';
 import { getTasks } from '../../actions/getTasks';
+import { undoLastTask } from '../../actions/undoTask';
 
 const myPersonId =
   'amzn1.ask.person.AMBEZQ7TEOJO6LE2JNJ3NWW7TCQMW3NVCHQCWPFJAPUCVGF6CVY3267EWRXIGY5FPLGWFIM6BULO47DAZMY4HSHEJD5QMDHL6DL7SNREOB4HGKZOL2H2BPC5TRLFSNKC2IJDYRI';
@@ -16,6 +17,15 @@ const skill = SkillBuilders.custom()
 
       if (input.requestEnvelope.request.type !== 'IntentRequest') {
         return error(`Unsupported operation: ${input.requestEnvelope.request.type}.`);
+      }
+
+      if (getIntentName(input.requestEnvelope) === 'AMAZON.CancelIntent') {
+        const task = await undoLastTask();
+        return input.responseBuilder.speak(`Cancelled "${fixTaskTitle(task.title)}".`).getResponse();
+      }
+
+      if (getIntentName(input.requestEnvelope) === 'AMAZON.CancelIntent') {
+        return input.responseBuilder.speak('Momo is a chunky boy').getResponse();
       }
 
       const choreInput =
