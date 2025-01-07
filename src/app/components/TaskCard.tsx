@@ -77,7 +77,7 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
       )}
       <button
         className="btn-ghost btn-square btn right-0 ml-2 bg-base-content/10"
-        onClick={async event => {
+        onClick={event => {
           event.stopPropagation();
           event.preventDefault();
 
@@ -95,7 +95,7 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
             }
           }
 
-          await toast.promise(completeTask(task.id, comment), {
+          void toast.promise(completeTask(task.id, comment), {
             loading: <span>Completing {task?.title}</span>,
             success: <b>Completed {task?.title}</b>,
             error: <b>Could not complete {task?.title}</b>,

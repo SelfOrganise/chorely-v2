@@ -152,8 +152,8 @@ export function NavBar({ name }: { name?: string }): React.JSX.Element {
           {themes.map(t => (
             <li className="justify-between" key={t} value={t}>
               <button
-                onClick={async () =>
-                  await toast.promise(updateTheme(t), {
+                onClick={() =>
+                  void toast.promise(updateTheme(t), {
                     loading: <span>Updating theme</span>,
                     success: <b>Theme updated</b>,
                     error: <b>Could not update theme</b>,

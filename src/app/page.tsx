@@ -38,7 +38,7 @@ async function MyTasks({
 }
 
 function Skeleton(): Array<ReactNode> {
-  return Array(5).fill(
+  return Array<ReactNode>(5).fill(
     <div className="skeleton flex flex-row pl-3 pr-3 rounded w-full h-16 items-center">
       <div className="flex flex-col pt-2 pb-2 w-full h-full justify-around">
         <div className="skeleton-text w-1/2 h-4 rounded backdrop-contrast-75" />

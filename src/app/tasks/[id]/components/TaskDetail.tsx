@@ -28,7 +28,7 @@ export function TaskDetail({
         <button
           disabled={!task}
           className={classNames(!task && 'skeleton', 'btn-error btn flex flex-1')}
-          onClick={async event => {
+          onClick={event => {
             event.preventDefault();
             if (!task) {
               return;
@@ -38,7 +38,7 @@ export function TaskDetail({
               return;
             }
 
-            await toast.promise(toggleArchived(task.id), {
+            void toast.promise(toggleArchived(task.id), {
               loading: (
                 <span>
                   {task?.archived ? 'Unarchiving' : 'Archiving'} {task?.title}
