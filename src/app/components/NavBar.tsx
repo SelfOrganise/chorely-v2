@@ -39,7 +39,7 @@ const themes = [
   'winter',
 ];
 
-export function NavBar({ name }: { name?: string }): JSX.Element {
+export function NavBar({ name }: { name?: string }): React.JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
