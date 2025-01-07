@@ -58,7 +58,7 @@ export function TaskDetail({
         <button
           disabled={!task}
           className={classNames(!task && 'skeleton', 'btn-error btn flex flex-1')}
-          onClick={async event => {
+          onClick={event => {
             event.preventDefault();
             if (!task) {
               return;
@@ -68,13 +68,15 @@ export function TaskDetail({
               return;
             }
 
-            await toast.promise(deleteTask(task?.id), {
-              loading: <span>Deleting {task?.title}...</span>,
-              success: <b>Deleted {task?.title}</b>,
-              error: <b>Could not delete {task?.title}</b>,
-            });
+            void (async function () {
+              await toast.promise(deleteTask(task?.id), {
+                loading: <span>Deleting {task?.title}...</span>,
+                success: <b>Deleted {task?.title}</b>,
+                error: <b>Could not delete {task?.title}</b>,
+              });
 
-            router.replace('/');
+              router.replace('/');
+            })();
           }}
         >
           Delete
