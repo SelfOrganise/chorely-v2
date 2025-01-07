@@ -87,7 +87,7 @@ export function TaskDetail({
 
       <form
         className="relative flex flex-col space-y-3 pb-4"
-        onSubmit={async (
+        onSubmit={(
           form: FormEvent<
             HTMLFormElement & {
               title: HTMLInputElement;
@@ -98,7 +98,7 @@ export function TaskDetail({
         ) => {
           form.preventDefault();
 
-          await toast.promise(
+          void toast.promise(
             updateTask({
               id: task?.id,
               title: form.currentTarget.title.value,
@@ -191,8 +191,8 @@ export function TaskDetail({
                     {h.user.id === userId && (
                       <button
                         className="btn-ghost btn"
-                        onClick={async () => {
-                          await toast.promise(undoTask(h.id), {
+                        onClick={() => {
+                          void toast.promise(undoTask(h.id), {
                             loading: <span>Undoing previous completion</span>,
                             success: <b>Undo complete</b>,
                             error: <b>Could not undo</b>,
