@@ -4,8 +4,9 @@ import { authOptions } from '../utils/authOptions';
 import { TaskCard } from './components/TaskCard';
 import { getTasks } from './actions/getTasks';
 
-export default function Tasks({ searchParams }: { searchParams: { showArchived?: string } }) {
-  const includeArchived = searchParams.showArchived === 'true';
+export default async function Tasks({ searchParams }: { searchParams: Promise<{ showArchived?: string }> }) {
+  const { showArchived } = await searchParams;
+  const includeArchived = showArchived === 'true';
   return (
     <div className="relative w-full space-y-5">
       <div className="divider">My tasks</div>

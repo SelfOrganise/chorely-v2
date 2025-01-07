@@ -4,8 +4,9 @@ import { authOptions } from '../../../utils/authOptions';
 import { getTask } from '../../actions/getTask';
 import { TaskDetail } from './components/TaskDetail';
 
-export default async function TaskContainer({ params }: { params: { id: string } }) {
-  const task = await getTask({ id: params.id });
+export default async function TaskContainer({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const task = await getTask({ id });
   const session = await getServerSession(authOptions);
 
   if (!task) {
