@@ -147,7 +147,7 @@ export function NavBar({ name }: { name?: string }): React.JSX.Element {
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content menu rounded-box menu-compact mt-3 h-[200px] w-52 flex-nowrap overflow-auto bg-base-100 p-2 shadow z-10"
+          className="dropdown-content menu rounded-box menu-compact mt-3 h-[200px] w-52 flex-nowrap overflow-auto bg-base-100 p-2 shadow-sm z-10"
         >
           {themes.map(t => (
             <li className="justify-between" key={t} value={t}>

@@ -24,4 +24,7 @@ export default defineNextConfig({
     locales: ['en'],
     defaultLocale: 'en',
   },
+  experimental: {
+    viewTransition: true
+  }
 });
