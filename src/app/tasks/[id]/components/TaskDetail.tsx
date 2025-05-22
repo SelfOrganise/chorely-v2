@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames';
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import moment from 'moment/moment';
 import { FormEvent } from 'react';
 import toast from 'react-hot-toast';
@@ -21,63 +21,77 @@ export function TaskDetail({
 }) {
   const router = useRouter();
 
+  const handleArchive: MouseEventHandler<HTMLButtonElement> = event => {
+    event.preventDefault();
+    if (!task) {
+      return;
+    }
+
+    if (!confirm(`Archive "${task?.title}"?`)) {
+      return;
+    }
+
+    void toast.promise(toggleArchived(task.id), {
+      loading: (
+        <span>
+          {task?.archived ? 'Unarchiving' : 'Archiving'} {task?.title}
+        </span>
+      ),
+      success: (
+        <b>
+          {task?.archived ? 'Unarchived' : 'Archived'} {task?.title}
+        </b>
+      ),
+      error: <b>Could not toggleArchived {task?.title}</b>,
+    });
+  };
+
+  const handleDelete: MouseEventHandler<HTMLButtonElement> = event => {
+    event.preventDefault();
+    if (!task) {
+      return;
+    }
+
+    if (!confirm(`Delete "${task?.title}"?`)) {
+      return;
+    }
+
+    void (async function () {
+      await toast.promise(deleteTask(task?.id), {
+        loading: <span>Deleting {task?.title}...</span>,
+        success: <b>Deleted {task?.title}</b>,
+        error: <b>Could not delete {task?.title}</b>,
+      });
+
+      router.replace('/');
+    })();
+  };
+
   return (
     <div className="w-full">
       <div className="divider">Actions</div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <button
+          className={classNames(!task && 'skeleton', 'btn-secondary btn flex flex-1')}
           disabled={!task}
-          className={classNames(!task && 'skeleton', 'btn-error btn flex flex-1')}
           onClick={event => {
             event.preventDefault();
-            if (!task) {
-              return;
-            }
-
-            if (!confirm(`Archive "${task?.title}"?`)) {
-              return;
-            }
-
-            void toast.promise(toggleArchived(task.id), {
-              loading: (
-                <span>
-                  {task?.archived ? 'Unarchiving' : 'Archiving'} {task?.title}
-                </span>
-              ),
-              success: (
-                <b>
-                  {task?.archived ? 'Unarchived' : 'Archived'} {task?.title}
-                </b>
-              ),
-              error: <b>Could not toggleArchived {task?.title}</b>,
-            });
+            router.back();
           }}
+        >
+          Back
+        </button>
+        <button
+          disabled={!task}
+          className={classNames(!task && 'skeleton', 'btn-warning btn flex flex-1')}
+          onClick={handleArchive}
         >
           {task?.archived ? 'Unarchive' : 'Archive'}
         </button>
         <button
           disabled={!task}
           className={classNames(!task && 'skeleton', 'btn-error btn flex flex-1')}
-          onClick={event => {
-            event.preventDefault();
-            if (!task) {
-              return;
-            }
-
-            if (!confirm(`Delete "${task?.title}"?`)) {
-              return;
-            }
-
-            void (async function () {
-              await toast.promise(deleteTask(task?.id), {
-                loading: <span>Deleting {task?.title}...</span>,
-                success: <b>Deleted {task?.title}</b>,
-                error: <b>Could not delete {task?.title}</b>,
-              });
-
-              router.replace('/');
-            })();
-          }}
+          onClick={handleDelete}
         >
           Delete
         </button>
@@ -126,37 +140,29 @@ export function TaskDetail({
             <div className="indicator-start badge-secondary badge indicator-item indicator-top">{task?.times}</div>
           )}
         </div>
-        <input
-          disabled={!task}
-          className={classNames(!task && 'skeleton', 'input-bordered input')}
-          type="number"
-          name="frequency"
-          placeholder="Frequency in hours"
-          defaultValue={task?.frequency || undefined}
-        />
-        <div className="flex align-middle justify-end space-x-2">
-          <label htmlFor="required-comment" className="select-none">
-            Requires comment:
-          </label>
+        <div className="flex align-middle items-center justify-between">
           <input
             disabled={!task}
-            id="required-comment"
-            className={classNames(!task && 'skeleton', 'checkbox')}
-            type="checkbox"
-            defaultChecked={task?.requiresComment}
+            className={classNames(!task && 'skeleton', 'input-bordered input')}
+            type="number"
+            name="frequency"
+            placeholder="Frequency in hours"
+            defaultValue={task?.frequency || undefined}
           />
+          <div className="space-x-2">
+            <label htmlFor="required-comment" className="select-none">
+              Requires comment:
+            </label>
+            <input
+              disabled={!task}
+              id="required-comment"
+              className={classNames(!task && 'skeleton', 'checkbox')}
+              type="checkbox"
+              defaultChecked={task?.requiresComment}
+            />
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            className={classNames(!task && 'skeleton', 'btn-secondary btn flex flex-1')}
-            disabled={!task}
-            onClick={event => {
-              event.preventDefault();
-              router.back();
-            }}
-          >
-            Back
-          </button>
+        <div className="grid">
           <button
             className={classNames(!task && 'skeleton', 'btn-primary btn flex flex-1')}
             disabled={!task}

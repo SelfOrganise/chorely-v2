@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev --turbopack",
     "dev:notify": "ts-node-transpile-only ./watcher.ts",
     "build": "next build",
     "build:notify": "esbuild watcher.ts --platform=node --bundle --outfile=watcher.js",
