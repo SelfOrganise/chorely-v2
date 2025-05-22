@@ -79,7 +79,7 @@ export function TaskDetail({
             router.back();
           }}
         >
-          Back
+          ⬅️ Back
         </button>
         <button
           disabled={!task}
@@ -93,7 +93,7 @@ export function TaskDetail({
           className={classNames(!task && 'skeleton', 'btn-error btn flex flex-1')}
           onClick={handleDelete}
         >
-          Delete
+          ❌ Delete
         </button>
       </div>
 
@@ -168,7 +168,7 @@ export function TaskDetail({
             disabled={!task}
             type="submit"
           >
-            Save
+            💾 Save
           </button>
         </div>
       </form>
