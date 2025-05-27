@@ -12,7 +12,7 @@ export default async function Timeline() {
       {historyItems.map(({ createdAt, task, user }) => (
         <li key={createdAt.toISOString() + user.id}>
           <div
-            className={`flex flex-col timeline-${user.id === userId ? 'end' : 'start'} text-xs font-thin text-base-content/70 h-full mt-6`}
+            className={`flex flex-col timeline-${user.id === userId ? 'end' : 'start'} text-xs font-thin text-base-content/70 h-full mt-5 mx-1 leading-none`}
           >
             {moment(createdAt).fromNow()}
           </div>
