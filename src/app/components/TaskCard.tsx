@@ -54,10 +54,9 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
     }
 
     const date = moment(lastCompleted);
-    const defaultDate = <div className="text-xs font-thin text-base-content/70">{date.fromNow()}</div>;
 
-    return defaultDate;
-  }, [lastCompleted, task.frequency]);
+    return <div className="text-xs font-thin text-base-content/70">{date.fromNow()}</div>;
+  }, [lastCompleted]);
 
   return (
     <Link

@@ -15,16 +15,7 @@ function defineNextConfig(config) {
 export default defineNextConfig({
   reactStrictMode: true,
   output: 'standalone',
-  /** Next.js i18n docs:
-   * @see https://nextjs.org/docs/advanced-features/i18n-routing
-   * Reference repo for i18n:
-   * @see https://github.com/juliusmarminge/t3-i18n
-   **/
-  i18n: {
-    locales: ['en'],
-    defaultLocale: 'en',
-  },
   experimental: {
-    viewTransition: true
-  }
+    viewTransition: true,
+  },
 });

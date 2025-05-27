@@ -1,0 +1,13 @@
+services:
+  chorely-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./prisma:/app/db
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/db/chorely-v2.sqlite
+      - NEXTAUTH_SECRET=secret

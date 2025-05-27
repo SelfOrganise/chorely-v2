@@ -27,13 +27,14 @@ model User {
 model Task {
    id               String    @id @default(uuid())
    title            String
+   description      String    @default("")
    history          History[]
    frequency        Int?
    score            Int       @default(0)
    lastCompleted    DateTime  @default(now())
    archived         Boolean   @default(false)
    flagged          Boolean   @default(false)
-   requiresComment  Boolean @default(false)
+   requiresComment  Boolean   @default(false)
 }
 
 model History {

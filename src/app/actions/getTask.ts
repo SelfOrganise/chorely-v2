@@ -13,6 +13,7 @@ export const getTask = cache(async ({ id }: { id: string }) => {
     select: {
       id: true,
       title: true,
+      description: true,
       frequency: true,
       score: true,
       archived: true,

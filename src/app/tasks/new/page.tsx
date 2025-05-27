@@ -15,17 +15,13 @@ export default function NewTask() {
           form.preventDefault();
 
           void (async function () {
-            await createTask({
-              title: form.currentTarget.title.value,
-              frequency: Number(form.currentTarget.frequency.value) || null,
-            });
+            await createTask({ title: form.currentTarget.title.value });
 
             router.replace('/');
           })();
         }}
       >
-        <input className="input-bordered input" autoFocus type="text" name="title" placeholder="Title" />
-        <input className="input-bordered input" type="number" name="frequency" placeholder="Frequency in hours" />
+        <input className="input-bordered input w-full" autoFocus type="text" name="title" placeholder="Title" />
         <div className="grid grid-cols-2 gap-2">
           <button
             className="btn-secondary btn"

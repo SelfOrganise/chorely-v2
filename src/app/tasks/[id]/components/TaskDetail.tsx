@@ -105,7 +105,7 @@ export function TaskDetail({
           form: FormEvent<
             HTMLFormElement & {
               title: HTMLInputElement;
-              frequency: HTMLInputElement;
+              description: HTMLTextAreaElement;
               'required-comment': HTMLInputElement;
             }
           >
@@ -116,7 +116,7 @@ export function TaskDetail({
             updateTask({
               id: task?.id,
               title: form.currentTarget.title.value,
-              frequency: Number(form.currentTarget.frequency.value) || undefined,
+              description: form.currentTarget.description.value,
               requiresComment: form.currentTarget['required-comment'].checked,
             }),
             {
@@ -140,15 +140,15 @@ export function TaskDetail({
             <div className="indicator-start badge-secondary badge indicator-item indicator-top">{task?.times}</div>
           )}
         </div>
+        <div>
+          <textarea
+            name="description"
+            defaultValue={task?.description}
+            className="textarea w-full p-4"
+            placeholder="Description"
+          ></textarea>
+        </div>
         <div className="self-end flex align-middle items-center justify-between">
-          {/*<input*/}
-          {/*  disabled={!task}*/}
-          {/*  className={classNames(!task && 'skeleton', 'input-bordered input')}*/}
-          {/*  type="number"*/}
-          {/*  name="frequency"*/}
-          {/*  placeholder="Frequency in hours"*/}
-          {/*  defaultValue={task?.frequency || undefined}*/}
-          {/*/>*/}
           <div className="space-x-2">
             <label htmlFor="required-comment" className="select-none">
               Requires comment:
