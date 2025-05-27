@@ -11,6 +11,7 @@ export const getTasks = cache(async ({ includeArchived }: { includeArchived?: bo
       frequency: true,
       archived: true,
       requiresComment: true,
+      flagged: true,
       history: {
         select: {
           createdAt: true,
@@ -23,6 +24,9 @@ export const getTasks = cache(async ({ includeArchived }: { includeArchived?: bo
     },
     where: {
       archived: includeArchived ? undefined : false,
+    },
+    orderBy: {
+      flagged: 'desc',
     },
   });
 

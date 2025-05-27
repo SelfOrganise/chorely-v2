@@ -36,6 +36,7 @@ export async function completeTaskInternal(userId: string, id: string, comment: 
     },
     data: {
       score: task.score + user.sign,
+      flagged: false,
     },
   });
 

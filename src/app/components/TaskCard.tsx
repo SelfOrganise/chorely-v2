@@ -7,6 +7,7 @@ import React, { useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { completeTask } from '../actions/completeTask';
 import type { getTasks } from '../actions/getTasks';
+import { toggleFlag } from '../actions/toggleFlag';
 
 const commentIcon = (
   <svg className="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -33,6 +34,17 @@ const checkIcon = (
   </svg>
 );
 
+const flagIcon = (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24">
+    <path
+      className="fill-current"
+      fillRule="evenodd"
+      d="M5 1.3c.4 0 .8.3.8.7v1l1.5-.2a9 9 0 0 1 5.4.5h.2c1.4.6 3 .7 4.4.3a2 2 0 0 1 2.4 2v7.3c0 1-.6 1.9-1.6 2l-.2.1c-2 .5-4 .4-5.8-.3a8 8 0 0 0-4.5-.5l-1.8.4V22a.8.8 0 0 1-1.5 0V2c0-.4.3-.8.7-.8ZM5.8 13l1.5-.3a9 9 0 0 1 5.4.5 8 8 0 0 0 4.8.3h.3c.2-.1.4-.4.4-.7V5.5c0-.3-.2-.5-.5-.4a9 9 0 0 1-5.4-.4h-.2a8 8 0 0 0-4.5-.5l-1.8.4v8.5Z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
 export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[number] }): React.JSX.Element => {
   const lastCompleted = task.history?.[0]?.createdAt;
 
@@ -42,20 +54,9 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
     }
 
     const date = moment(lastCompleted);
-    const defaultDate = <div className="text-xs font-thin text-base-content/50">{date.fromNow()}</div>;
+    const defaultDate = <div className="text-xs font-thin text-base-content/70">{date.fromNow()}</div>;
 
-    if (!task.frequency || task.frequency <= 0) {
-      return defaultDate;
-    }
-
-    const dueDate = date.clone().add(task.frequency, 'hours');
-    if (dueDate.isSameOrAfter(new Date())) {
-      return defaultDate;
-    }
-
-    const timeLate = moment.duration(dueDate.diff(moment()));
-
-    return <div className="text-xs font-semibold text-error">{timeLate.humanize()} late</div>;
+    return defaultDate;
   }, [lastCompleted, task.frequency]);
 
   return (
@@ -64,17 +65,33 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
       scroll={true}
       className={classNames(
         task.archived && 'grayscale opacity-50',
+        task.flagged && 'bg-warning/20',
         'indicator relative flex w-full cursor-pointer items-center justify-between rounded-sm bg-base-300/70 pb-2 pt-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300'
       )}
       href={`/tasks/${task.id}`}
     >
       <div className="w-full">
-        <span className="text-base-content/70">{task.title}</span>
+        <span className="text-base-content/90">{task.title}</span>
         {date}
       </div>
       {task.times > 1 && (
         <span className="indicator-start badge-secondary badge indicator-item indicator-top">{task.times}</span>
       )}
+      <button
+        className={classNames('btn-ghost btn-square btn right-0 ml-2')}
+        onClick={event => {
+          event.stopPropagation();
+          event.preventDefault();
+
+          void toast.promise(toggleFlag(task.id), {
+            loading: <span>Flagging {task?.title}</span>,
+            success: <b>Flagged {task?.title}</b>,
+            error: <b>Could not flag {task?.title}</b>,
+          });
+        }}
+      >
+        <span className={task.flagged ? 'text-error' : 'text-base-content/20'}>{flagIcon}</span>
+      </button>
       <button
         className="btn-ghost btn-square btn right-0 ml-2 bg-base-content/10"
         onClick={event => {
