@@ -65,16 +65,16 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
       className={classNames(
         task.archived && 'grayscale opacity-50',
         task.flagged && 'bg-warning/20',
-        'card flex flex-row w-full cursor-pointer items-center justify-between bg-base-100/60 pb-2 pt-2 px-3 font-semibold shadow-md hover:bg-base-300'
+        'card flex flex-row w-full cursor-pointer items-center justify-between bg-base-100 border-solid border-primary/20 border-1 py-3 px-3 hover:bg-base-300'
       )}
       href={`/tasks/${task.id}`}
     >
-      <div className="flex text-2xl justify-center items-center mr-3">
+      <div className="flex text-2xl justify-center items-center ml-2 mr-4">
         <span className="z-10">{task.icon || '❓'}</span>
         <span className="absolute text-4xl blur-lg opacity-60 mask mask-squircle">{task.icon || '❓'}</span>
       </div>
       <div className="w-full">
-        <span className="text-base-content">{task.title}</span>
+        <span className="text-base-content tracking-tight">{task.title}</span>
         {date}
       </div>
       <button

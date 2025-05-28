@@ -18,7 +18,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <main
           data-theme={user.theme}
-          className="container flex h-screen min-w-full flex-col items-center p-4 bg-gradient-to-b from-primary/20 to-secondary/10"
+          className="container flex h-screen min-w-full flex-col items-center p-4 bg-gradient-to-b from-secondary/10 to-primary/20"
         >
           <Toaster
             toastOptions={{

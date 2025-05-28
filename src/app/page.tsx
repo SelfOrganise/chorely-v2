@@ -8,12 +8,12 @@ export default async function Tasks({ searchParams }: { searchParams: Promise<{ 
   const { showArchived } = await searchParams;
   const includeArchived = showArchived === 'true';
   return (
-    <div className="relative w-full space-y-4">
-      <div className="divider select-none">My tasks</div>
+    <div className="relative w-full space-y-1">
+      <div className="divider select-none font-bold">My tasks</div>
       <Suspense fallback={<Skeleton />}>
         <MyTasks includeArchived={includeArchived} filterCurrentSession={true} />
       </Suspense>
-      <div className="divider select-none">Not my problem</div>
+      <div className="divider select-none font-bold">Not my problem</div>
       <Suspense fallback={<Skeleton />}>
         <MyTasks includeArchived={includeArchived} filterCurrentSession={false} />
       </Suspense>
