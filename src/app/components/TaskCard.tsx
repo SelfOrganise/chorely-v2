@@ -74,7 +74,7 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
         <span className="absolute text-4xl blur-lg opacity-60 mask mask-squircle">{task.icon || '❓'}</span>
       </div>
       <div className="w-full">
-        <span className="text-base-content/90">{task.title}</span>
+        <span className="text-base-content">{task.title}</span>
         {date}
       </div>
       <button
