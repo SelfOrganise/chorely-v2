@@ -180,9 +180,9 @@ export function NavBar({ name }: { name?: string }): React.JSX.Element {
           fillRule="evenodd"
           strokeLinejoin="round"
           strokeMiterlimit="2"
-          className="TridactylThemeDark"
           clipRule="evenodd"
           viewBox="0 0 512 512"
+          className="fill-current"
         >
           <path
             fillRule="nonzero"
