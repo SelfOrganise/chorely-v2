@@ -65,7 +65,7 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
       className={classNames(
         task.archived && 'grayscale opacity-50',
         task.flagged && 'bg-warning/20',
-        'indicator relative flex w-full cursor-pointer items-center justify-between rounded-sm bg-base-300/70 pb-2 pt-2 px-3 font-semibold shadow-md hover:bg-base-300'
+        'card flex flex-row w-full cursor-pointer items-center justify-between bg-base-100/60 pb-2 pt-2 px-3 font-semibold shadow-md hover:bg-base-300'
       )}
       href={`/tasks/${task.id}`}
     >
@@ -77,9 +77,6 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
         <span className="text-base-content/90">{task.title}</span>
         {date}
       </div>
-      {task.times > 1 && (
-        <span className="indicator-start badge-secondary badge indicator-item indicator-top">{task.times}</span>
-      )}
       <button
         className={classNames('btn-ghost btn-square btn right-0 ml-2')}
         onClick={event => {
@@ -96,7 +93,7 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
         <span className={task.flagged ? 'text-error' : 'text-base-content/20'}>{flagIcon}</span>
       </button>
       <button
-        className="btn-ghost btn-square btn right-0 ml-2 bg-base-content/10"
+        className="indicator btn-ghost btn-square btn right-0 ml-2 bg-accent/10"
         onClick={event => {
           event.stopPropagation();
           event.preventDefault();
@@ -123,6 +120,11 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
         }}
       >
         {task.requiresComment ? commentIcon : checkIcon}
+        {task.times > 1 && (
+          <span className="indicator-start badge-secondary badge badge-xs indicator-item indicator-top text-xs">
+            {task.times}
+          </span>
+        )}
       </button>
     </Link>
   );

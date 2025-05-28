@@ -16,7 +16,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body>
-        <main data-theme={user.theme} className="container flex min-h-screen min-w-full flex-col items-center p-4">
+        <main
+          data-theme={user.theme}
+          className="container flex h-screen min-w-full flex-col items-center p-4 bg-gradient-to-b from-primary/20 to-secondary/10"
+        >
           <Toaster
             toastOptions={{
               style: {
@@ -26,7 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               },
             }}
           />
-          <div className="w-full max-w-xl">
+          <div className="w-full h-full overflow-scroll max-w-xl">
             <NavBar name={user.displayName} />
             <div className="flex w-full flex-col items-center">{children}</div>
           </div>
