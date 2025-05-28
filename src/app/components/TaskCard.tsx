@@ -69,7 +69,10 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
       )}
       href={`/tasks/${task.id}`}
     >
-      <div className="flex text-2xl justify-center items-center mr-3">{task.icon || '🏆'}</div>
+      <div className="flex text-2xl justify-center items-center mr-3">
+        <span className="z-10">{task.icon || '❓'}</span>
+        <span className="absolute text-4xl blur-lg opacity-60 mask mask-squircle">{task.icon || '❓'}</span>
+      </div>
       <div className="w-full">
         <span className="text-base-content/90">{task.title}</span>
         {date}
