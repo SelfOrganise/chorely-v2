@@ -104,6 +104,7 @@ export function TaskDetail({
         onSubmit={(
           form: FormEvent<
             HTMLFormElement & {
+              icon: HTMLInputElement;
               title: HTMLInputElement;
               description: HTMLTextAreaElement;
               'required-comment': HTMLInputElement;
@@ -115,6 +116,7 @@ export function TaskDetail({
           void toast.promise(
             updateTask({
               id: task?.id,
+              icon: form.currentTarget.icon.value,
               title: form.currentTarget.title.value,
               description: form.currentTarget.description.value,
               requiresComment: form.currentTarget['required-comment'].checked,
@@ -127,7 +129,15 @@ export function TaskDetail({
           );
         }}
       >
-        <div className="indicator w-full">
+        <div className="indicator gap-2">
+          <input
+            disabled={!task}
+            className={classNames(!task && 'skeleton', 'input-bordered input w-full flex-1/4')}
+            type="text"
+            name="icon"
+            placeholder="Icon"
+            defaultValue={task?.icon}
+          />
           <input
             disabled={!task}
             className={classNames(!task && 'skeleton', 'input-bordered input w-full')}

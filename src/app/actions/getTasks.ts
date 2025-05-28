@@ -7,6 +7,7 @@ export const getTasks = cache(async ({ includeArchived }: { includeArchived?: bo
     select: {
       id: true,
       score: true,
+      icon: true,
       title: true,
       frequency: true,
       archived: true,

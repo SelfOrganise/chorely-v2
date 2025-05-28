@@ -65,10 +65,11 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
       className={classNames(
         task.archived && 'grayscale opacity-50',
         task.flagged && 'bg-warning/20',
-        'indicator relative flex w-full cursor-pointer items-center justify-between rounded-sm bg-base-300/70 pb-2 pt-2 pl-3 pr-3 font-semibold shadow-md hover:bg-base-300'
+        'indicator relative flex w-full cursor-pointer items-center justify-between rounded-sm bg-base-300/70 pb-2 pt-2 px-3 font-semibold shadow-md hover:bg-base-300'
       )}
       href={`/tasks/${task.id}`}
     >
+      <div className="flex text-2xl justify-center items-center mr-3">{task.icon || '🏆'}</div>
       <div className="w-full">
         <span className="text-base-content/90">{task.title}</span>
         {date}

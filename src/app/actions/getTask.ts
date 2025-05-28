@@ -12,6 +12,7 @@ export const getTask = cache(async ({ id }: { id: string }) => {
     },
     select: {
       id: true,
+      icon: true,
       title: true,
       description: true,
       frequency: true,

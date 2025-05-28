@@ -4,7 +4,7 @@ import { Task } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { prisma } from '../../utils/prisma';
 
-export async function createTask(task: Pick<Task, 'title'>) {
+export async function createTask(task: Pick<Task, 'title' | 'icon'>) {
   await prisma.task.create({
     data: task,
   });

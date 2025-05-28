@@ -26,6 +26,7 @@ model User {
 
 model Task {
    id               String    @id @default(uuid())
+   icon             String    @default("")
    title            String
    description      String    @default("")
    history          History[]
