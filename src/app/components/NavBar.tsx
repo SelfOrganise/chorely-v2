@@ -194,7 +194,7 @@ export function NavBar({ name }: { name?: string }): React.JSX.Element {
   );
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100/90 shadow-md rounded-xl">
       <div className="flex-none">{homeButton}</div>
       <div className="flex-1 pl-2 pr-2 text-lg">
         <span className="font-bold">{name}</span>
