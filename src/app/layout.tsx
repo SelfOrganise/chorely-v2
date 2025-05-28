@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               },
             }}
           />
-          <div className="w-full h-full overflow-scroll max-w-xl">
+          <div className="w-full h-full overflow-y-auto max-w-xl">
             <NavBar name={user.displayName} />
             <div className="flex w-full flex-col items-center">{children}</div>
           </div>
