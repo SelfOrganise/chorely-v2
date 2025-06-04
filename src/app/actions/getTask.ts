@@ -20,6 +20,7 @@ export const getTask = cache(async ({ id }: { id: string }) => {
       archived: true,
       requiresComment: true,
       history: {
+        take: 10,
         orderBy: {
           createdAt: 'desc',
         },
