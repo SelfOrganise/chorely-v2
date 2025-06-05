@@ -64,7 +64,7 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
       scroll={true}
       className={classNames(
         task.archived && 'grayscale opacity-50',
-        task.flagged && 'bg-warning/20',
+        task.flagged && 'bg-warning/10 border-warning/90 border-2',
         'card flex flex-row w-full cursor-pointer items-center justify-between bg-base-100 border-solid border-primary/20 border-1 py-3 px-3 hover:bg-base-300'
       )}
       href={`/tasks/${task.id}`}
@@ -74,7 +74,7 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
         <span className="absolute text-4xl blur-lg opacity-60 mask mask-squircle">{task.icon || '❓'}</span>
       </div>
       <div className="w-full">
-        <span className="text-base-content tracking-tight">{task.title}</span>
+        <span className={classNames('text-base-content tracking-tight')}>{task.title}</span>
         {date}
       </div>
       <button
@@ -93,7 +93,10 @@ export const TaskCard = ({ task }: { task: Awaited<ReturnType<typeof getTasks>>[
         <span className={task.flagged ? 'text-error' : 'text-base-content/20'}>{flagIcon}</span>
       </button>
       <button
-        className="indicator btn-ghost btn-square btn right-0 ml-2 bg-accent/10"
+        className={classNames(
+          'indicator btn-ghost btn-square btn right-0 ml-2 bg-accent/10',
+          task.flagged && 'bg-accent/50'
+        )}
         onClick={event => {
           event.stopPropagation();
           event.preventDefault();
