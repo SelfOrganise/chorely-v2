@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { createTask } from '../../../actions/createTask';
 import { getUsers } from '../../../actions/getUsers';
 
@@ -16,6 +16,7 @@ export function NewTask({ users }: { users: Awaited<ReturnType<typeof getUsers>>
           form: FormEvent<
             HTMLFormElement & {
               title: HTMLInputElement;
+              description: HTMLTextAreaElement;
               icon: HTMLInputElement;
               timesLeft: HTMLInputElement;
               assignedTo: HTMLSelectElement;
@@ -27,6 +28,7 @@ export function NewTask({ users }: { users: Awaited<ReturnType<typeof getUsers>>
           void (async function () {
             await createTask({
               title: form.currentTarget.title.value,
+              description: form.currentTarget.description.value,
               icon: form.currentTarget.icon.value,
               timesLeft: form.currentTarget.timesLeft.valueAsNumber || null,
               assignedTo: form.currentTarget.assignedTo.value,
@@ -38,7 +40,8 @@ export function NewTask({ users }: { users: Awaited<ReturnType<typeof getUsers>>
       >
         <div className="grid grid-cols-[1fr_4fr] gap-2">
           <input className="input-bordered input" type="text" name="icon" placeholder="Icon" />
-          <input className="input-bordered input" autoFocus type="text" name="title" placeholder="Title" />
+          <input className="input-bordered input w-full" autoFocus type="text" name="title" placeholder="Title" />
+          <textarea name="description" className="textarea w-full p-4 col-span-2" placeholder="Description"></textarea>
           <input
             className="input-bordered input col-span-2 w-full"
             type="number"

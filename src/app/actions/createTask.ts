@@ -7,7 +7,7 @@ import { prisma } from '../../utils/prisma';
 export async function createTask({
   assignedTo,
   ...task
-}: Pick<Task, 'title' | 'icon' | 'timesLeft'> & { assignedTo?: string }) {
+}: Pick<Task, 'title' | 'icon' | 'timesLeft' | 'description'> & { assignedTo?: string }) {
   const user = await prisma.user.findFirst({
     where: {
       id: assignedTo,
