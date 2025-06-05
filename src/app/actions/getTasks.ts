@@ -9,7 +9,6 @@ export const getTasks = cache(async ({ includeArchived }: { includeArchived?: bo
       score: true,
       icon: true,
       title: true,
-      frequency: true,
       archived: true,
       requiresComment: true,
       flagged: true,

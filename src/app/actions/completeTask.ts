@@ -30,6 +30,8 @@ export async function completeTaskInternal(userId: string, id: string, comment: 
   invariant(user, 'Cannot find user');
   invariant(otherUser, 'Cannot find user');
 
+  const newTimesLeft = task.timesLeft ? task.timesLeft - 1 : null;
+
   await prisma.task.update({
     where: {
       id,
@@ -37,6 +39,9 @@ export async function completeTaskInternal(userId: string, id: string, comment: 
     data: {
       score: task.score + user.sign,
       flagged: false,
+      archived: newTimesLeft === 0,
+      // note: when we reach 0, remove timesLeft
+      timesLeft: newTimesLeft === 0 ? null : newTimesLeft,
     },
   });
 

@@ -1,45 +1,9 @@
-'use client';
+'use server';
+import { getUsers } from '../../actions/getUsers';
+import { NewTask } from './components/NewTask';
 
-import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
-import { createTask } from '../../actions/createTask';
+export default async function Index() {
+  const users = await getUsers();
 
-export default function NewTask() {
-  const router = useRouter();
-
-  return (
-    <div className="flex w-full flex-col items-center justify-center">
-      <form
-        className="mt-5 flex w-full flex-col space-y-3"
-        onSubmit={(form: FormEvent<HTMLFormElement & { title: HTMLInputElement; icon: HTMLInputElement }>) => {
-          form.preventDefault();
-
-          void (async function () {
-            await createTask({ title: form.currentTarget.title.value, icon: form.currentTarget.icon.value });
-
-            router.replace('/');
-          })();
-        }}
-      >
-        <div className="grid grid-cols-[1fr_4fr] gap-2">
-          <input className="input-bordered input" autoFocus type="text" name="icon" placeholder="Icon" />
-          <input className="input-bordered input" autoFocus type="text" name="title" placeholder="Title" />
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            className="btn-secondary btn"
-            onClick={event => {
-              event.preventDefault();
-              router.replace('/');
-            }}
-          >
-            Cancel
-          </button>
-          <button className="btn-primary btn" type="submit">
-            Create
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+  return <NewTask users={users} />;
 }

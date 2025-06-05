@@ -15,10 +15,10 @@ export const getTask = cache(async ({ id }: { id: string }) => {
       icon: true,
       title: true,
       description: true,
-      frequency: true,
       score: true,
       archived: true,
       requiresComment: true,
+      timesLeft: true,
       history: {
         take: 10,
         orderBy: {

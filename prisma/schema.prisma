@@ -30,7 +30,7 @@ model Task {
    title            String
    description      String    @default("")
    history          History[]
-   frequency        Int?
+   timesLeft        Int?
    score            Int       @default(0)
    lastCompleted    DateTime  @default(now())
    archived         Boolean   @default(false)

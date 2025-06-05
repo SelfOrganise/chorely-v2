@@ -108,6 +108,7 @@ export function TaskDetail({
               title: HTMLInputElement;
               description: HTMLTextAreaElement;
               'required-comment': HTMLInputElement;
+              timesLeft: HTMLInputElement;
             }
           >
         ) => {
@@ -120,6 +121,7 @@ export function TaskDetail({
               title: form.currentTarget.title.value,
               description: form.currentTarget.description.value,
               requiresComment: form.currentTarget['required-comment'].checked,
+              timesLeft: form.currentTarget.timesLeft.valueAsNumber || null,
             }),
             {
               loading: <span>Updating {task?.title}</span>,
@@ -129,7 +131,7 @@ export function TaskDetail({
           );
         }}
       >
-        <div className="indicator gap-2">
+        <div className="indicator gap-2 w-full">
           <input
             disabled={!task}
             className={classNames(!task && 'skeleton', 'input-bordered input w-full flex-1/4')}
@@ -158,6 +160,13 @@ export function TaskDetail({
             placeholder="Description"
           ></textarea>
         </div>
+        <input
+          className="input-bordered input col-span-2 w-full"
+          type="number"
+          defaultValue={task?.timesLeft ?? ''}
+          name="timesLeft"
+          placeholder="Nr. of completion times before archival"
+        />
         <div className="self-end flex align-middle items-center justify-between">
           <div className="space-x-2">
             <label htmlFor="required-comment" className="select-none">

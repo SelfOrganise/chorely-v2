@@ -1,6 +1,6 @@
 import moment from 'moment/moment';
 import { getTimeline, TimelineItem } from '../actions/getTimeline';
-import { getCurrentUser } from '../actions/getUser';
+import { getCurrentUser } from '../actions/getCurrentUser';
 import React from 'react';
 
 export default async function Timeline() {
